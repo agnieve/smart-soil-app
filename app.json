@@ -26,5 +26,14 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
-  }
+  },
+  "android.config.googleMaps.apiKey": "AIzaSyAMXMlQPozlW21yX9TOiCRlyZonNlcyOmI",
+  "plugins": [
+    [
+      "expo-location",
+      {
+        "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+      }
+    ]
+  ]
 }

@@ -1,0 +1,8 @@
+Steps to install smart soil app for local development:
+
+1. Install node.js
+2. Install Flutter
+3. Open command promt and type: npm install expo -g
+4. Open project folder and on terminal run npx expo start
+5. On your mobile phone, install expo go
+6. Scan QR Code provided on terminal when you run npx expo start. This will show you the output UI of mobile phone
