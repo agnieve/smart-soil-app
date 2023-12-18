@@ -31,7 +31,7 @@ export default function LoginForm(props){
 
         setIsFailed(true);
     };
-
+    // test hahahaha
     return <View className={'flex flex-1 p-5 justify-center items-center bg-primaryColor'}>
         <Image className={'w-44 h-44 mb-3'} source={require('../../assets/logo.png')} />
         <Text className={'text-center text-3xl text-white mb-3'}>Login</Text>
