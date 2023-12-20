@@ -23,7 +23,7 @@ export default function LoginForm(props){
         for(let i=0; i < objKeys.length; i++){
             let user = result[objKeys[i]];
 
-            if(user.email === email && user.password === user.password){
+            if(user.email === email && user.password === password){
                 login(user);
                 return;
             }
