@@ -16,7 +16,7 @@ export default function LoginForm(props){
     const login = useUserStore((state) => state.login);
 
     const loginHandler = async () => {
-        const response = await fetch(`https://smart-soil-8e708-default-rtdb.asia-southeast1.firebasedatabase.app/users.json`);
+        const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/users.json`);
         const result = await response.json();
         const objKeys = Object.keys(result);
 

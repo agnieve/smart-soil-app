@@ -17,7 +17,7 @@ export default function SignupForm(props){
     const login = useUserStore((state) => state.login);
 
     const signupHandler = async () => {
-        const base_url = `https://smart-soil-8e708-default-rtdb.asia-southeast1.firebasedatabase.app/users.json`;
+        const base_url = `https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/users.json`;
 
         const options = {
             method: "POST",
