@@ -10,7 +10,6 @@ export default function DashboardScreen(){
 
     useEffect(()=>{
         const timer = setInterval(() => {
-            console.log("fetching...");
 
             (async ()=> {
                 const response = await fetch(`https://smart-soil-8e708-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);

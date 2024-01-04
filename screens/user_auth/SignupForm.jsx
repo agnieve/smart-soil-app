@@ -30,6 +30,7 @@ export default function SignupForm(props){
         }
 
         const response = await fetch(base_url, options);
+        console.log(await response.json());
         setIsSuccess(true);
 
     };

@@ -24,11 +24,11 @@ const buttons = [
         title: 'Tag Craft',
         icon: <Ionicons name="bookmark" size={30} color="#606060" />
     },
-    {
-        nav: 'ChangeCraft',
-        title: 'Change Craft',
-        icon: <Ionicons name="refresh" size={30} color="#606060" />
-    },
+    // {
+    //     nav: 'ChangeCraft',
+    //     title: 'Change Craft',
+    //     icon: <Ionicons name="refresh" size={30} color="#606060" />
+    // },
     {
         nav: 'History',
         title: 'History',
@@ -83,7 +83,7 @@ export default function App() {
             >
                 <Drawer.Screen name="Dashboard" component={DashboardScreen} />
                 <Drawer.Screen name="TagCraft" component={TagCraftScreen} />
-                <Drawer.Screen name="ChangeCraft" component={ChangeCraftScreen} />
+                {/* <Drawer.Screen name="ChangeCraft" component={ChangeCraftScreen} /> */}
                 <Drawer.Screen name="History" component={HistoryScreen} />
                 <Drawer.Screen name="Logout" component={LogoutScreen}  />
             </Drawer.Navigator>
