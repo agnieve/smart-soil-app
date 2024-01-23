@@ -30,7 +30,7 @@ export default function DashboardScreen(){
     return <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} className={'flex flex-1 bg-white flex-col p-5 gap-y-3'}>
         <View className={'bg-[#914C9E] w-56 p-5 rounded-full h-56 flex justify-center'}>
             <Text className={'mb-3 text-white text-center'}>Soil Moisture</Text>
-            <Text className={'text-5xl text-white text-center'}>0%</Text>
+            <Text className={'text-5xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.soilmoisture}%</Text>
         </View>
         <View className={'bg-[#F9A61C] w-56 p-5 rounded-full h-56 flex justify-center'}>
             <Text className={'mb-3 text-white text-center'}>Temperature</Text>
