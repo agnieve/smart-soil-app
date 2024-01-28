@@ -69,6 +69,13 @@ void loop() {
         // firebase.pushInt("Example/setInt", 123);
         // firebase.pushFloat("Example/setFloat", 45.32);
 
+        // Reading Soil moisture
+        Serial.print(RS.read(), 3);
+        Serial.print('\t');
+        Serial.print(RS.percentage(), 1);
+        Serial.print('\n');
+
+
         StaticJsonBuffer<256> jsonBuffer;
         JsonArray& array = jsonBuffer.createArray();
         array.add("timeStampObject");
