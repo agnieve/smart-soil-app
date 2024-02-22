@@ -1,23 +1,55 @@
 import {View, Text, TouchableOpacity, ScrollView} from "react-native";
 import {useEffect, useState} from "react";
+import WarningPopup from "./user_auth/WarningPopup";
 
 export default function DashboardScreen(){
 
     const [toggle, setToggle] = useState(false);
     const [dataSensor, setDataSensor] = useState([]);
     const [dataKeys, setDataKeys] = useState([]);
-
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [text, setText] = useState([]);
+    const [title, setTitle] = useState("");
 
     useEffect(()=>{
         const timer = setInterval(() => {
 
             (async ()=> {
-                const response = await fetch(`https://smart-soil-8e708-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
+                const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
                 const result = await response.json();
                 const objKeys = Object.keys(result);
 
                 setDataKeys(objKeys);
                 setDataSensor(result);
+
+                const humidity = result[Object.keys(result)[Object.keys(result).length - 1]].humidity;
+                const temperature = result[Object.keys(result)[Object.keys(result).length - 1]].temperature;
+                const soilMoisture = result[Object.keys(result)[Object.keys(result).length - 1]].soilMoisture;
+
+                
+                if(humidity <= 50 || temperature >= 35 || soilMoisture <= 50) {
+                    setIsModalVisible(true);
+                    const arr = [];
+                    if(humidity <= 50) {
+                        arr.push("Humidity is Getting Low")
+                    }
+
+                    if(temperature >= 35){
+                        arr.push("Temperature is Getting High")
+                    }
+
+                    if(soilMoisture <= 50){
+                        arr.push("Soil is Getting Dry")
+                    }
+
+                    setText(arr);
+                }
+
+                const resp = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/craftSelected.json');
+                const res = await resp.json();
+
+                setTitle(res);
+
             })();
             return ()=> clearInterval(timer)
         }, 5000);
@@ -27,10 +59,28 @@ export default function DashboardScreen(){
 
     },[]);
 
+    async function switchHandler() {
+
+        const base_url = 'https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/switch.json';
+        const options = {
+            method: 'PUT',
+            body: toggle ? "true" : "false"
+        }
+        const response = await fetch(base_url, options);
+    
+        const result = await response.json();
+    
+        console.log("result: ", result);
+
+        setToggle(prev => !prev);
+    }
+
     return <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} className={'flex flex-1 bg-white flex-col p-5 gap-y-3'}>
+        <WarningPopup text={text} isVisible={isModalVisible} setIsVisible={setIsModalVisible} />
+        <Text className={'text-2xl'}>{title}</Text>
         <View className={'bg-[#914C9E] w-56 p-5 rounded-full h-56 flex justify-center'}>
             <Text className={'mb-3 text-white text-center'}>Soil Moisture</Text>
-            <Text className={'text-5xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.soilmoisture}%</Text>
+            <Text className={'text-5xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.soilMoisture}%</Text>
         </View>
         <View className={'bg-[#F9A61C] w-56 p-5 rounded-full h-56 flex justify-center'}>
             <Text className={'mb-3 text-white text-center'}>Temperature</Text>
@@ -42,8 +92,8 @@ export default function DashboardScreen(){
         </View>
         <View className={'w-full h-40'}>
             <Text className={'text-xl mt-10 mb-3'}>Water Automation Status</Text>
-            <TouchableOpacity onPress={()=> setToggle(prev => !prev)} className={`w-full bg-${toggle ? 'secondaryColor' : 'primaryColor'} py-3 rounded-xl`}>
-                <Text className={'text-center font-bold'}>{ toggle ? 'OFF' : 'ON'}</Text>
+            <TouchableOpacity onPress={switchHandler} className={`w-full bg-${toggle ? 'secondaryColor' : 'primaryColor'} py-3 rounded-xl`}>
+                <Text className={'text-center font-bold'}>{ toggle ? 'ON' : 'OFF'}</Text>
             </TouchableOpacity>
         </View>
     </ScrollView>

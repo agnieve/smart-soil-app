@@ -4,7 +4,7 @@ import {Dimensions, Modal, Text, TouchableOpacity, View} from "react-native";
 
 export default function WarningPopup(props){
 
-    const { isVisible, setIsVisible } = props;
+    const { isVisible, setIsVisible, text = [] } = props;
 
     return <Modal
     className={'flex'}
@@ -23,7 +23,10 @@ export default function WarningPopup(props){
       <Ionicons name={'close'} color={'#fff'} size={40}/>
     </TouchableOpacity>
     </View>
-    <Text className={"text-white text-2xl"}>Humidity is Getting Low</Text>
+
+    {
+      text.length > 0 ? text.map((item,index) => <Text key={index} className={"text-white text-2xl"}>{item}</Text>) : null
+    }
   </View>
   </View>
 
