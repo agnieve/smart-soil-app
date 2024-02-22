@@ -86,7 +86,7 @@ export default function ChangeCraftScreen(){
 
     async function changeCraftHandler(name) {
 
-        const base_url = 'https://smart-soil-8e708-default-rtdb.asia-southeast1.firebasedatabase.app/craftSelected.json';
+        const base_url = 'https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/craftSelected.json';
         const options = {
             method: 'PUT',
             body: `"${name}"`

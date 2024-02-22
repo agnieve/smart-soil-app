@@ -19,6 +19,12 @@ export default function DashboardScreen(){
                 const result = await response.json();
                 const objKeys = Object.keys(result);
 
+                const resp = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/craftSelected.json');
+                const res = await resp.json();
+
+                console.log("changed name: ", res);
+                setTitle(res);
+
                 setDataKeys(objKeys);
                 setDataSensor(result);
 
@@ -44,12 +50,6 @@ export default function DashboardScreen(){
 
                     setText(arr);
                 }
-
-                const resp = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/craftSelected.json');
-                const res = await resp.json();
-
-                setTitle(res);
-
             })();
             return ()=> clearInterval(timer)
         }, 5000);
