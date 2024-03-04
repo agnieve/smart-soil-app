@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {View, Text} from "react-native";
 import { FlashList } from "@shopify/flash-list";
 import WarningPopup from "./user_auth/WarningPopup";
+import Input from "../components/Input";
 
 export default function HistoryScreen(){
 
@@ -9,7 +10,10 @@ export default function HistoryScreen(){
     const [dataKeys, setDataKeys] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [text, setText] = useState([]);
-    
+    const [search, setSearch] = useState("");
+    const [myArr, setMyArr] = useState([]);
+    const [searchArr, setSearchArr] = useState([]);
+
     useEffect(()=>{
         const timer = setInterval(() => {
 
@@ -44,24 +48,76 @@ export default function HistoryScreen(){
                     setText(arr);
                 }
 
+                const arr = [];
+                for(let i = 0; i < objKeys.length; i++){
+
+                    result[objKeys[i]].id = objKeys[i];
+                    result[objKeys[i]].myDate = new Date(parseInt(objKeys[i]) * 1000).toLocaleString() + " " + dayName[new Date(parseInt(objKeys[i]) * 1000).getDay()];
+                    arr.push(result[objKeys[i]]);
+                }
+
+                setMyArr(arr);
             })();
             return ()=> clearInterval(timer)
         }, 5000);
     },[])
 
+    const searchHandler = (val) => {
+        setSearch(val);
+    
+        if (val === '') {
+            setSearchArr([]);
+        } else {
+          let regex = new RegExp(val.trim(), 'ig');
+    
+          let alertNewArr = [];
+    
+          myArr.map((data) => {
+            if (regex.test(new Date(parseInt(data.id) * 1000).toLocaleString() + " " + dayName[new Date(parseInt(data.id) * 1000).getDay()])) {
+              alertNewArr.push(data);
+              return;
+            } 
+            // else if (
+            //   regex.test(
+            //     `${new Date(data.dateCreated).toLocaleDateString()} ${new Date(
+            //       data.dateCreated
+            //     ).toLocaleTimeString()}`
+            //   )
+            // ) {
+            //   alertNewArr.push(data);
+            // } else if (regex.test(data.email)) {
+            //   alertNewArr.push(data);
+            // } else if (regex.test(data.phoneNumber)) {
+            //   alertNewArr.push(data);
+            // }
+          });
+    
+    
+          setSearchArr(alertNewArr);
+        }
+      };
+
+      let dayName = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
     return(
         <View className={'flex flex-1 w-full h-full p-5'}>
             <WarningPopup text={text} isVisible={isModalVisible} setIsVisible={setIsModalVisible} />
+            <Input
+                addStyle={'bg-white'}
+                placeholder="Search by Date"
+                value={search}
+                onChangeText={(val) => searchHandler(val)}
+        />
              <FlashList
-                data={dataKeys}
+                data={searchArr.length > 0 ? searchArr : myArr}
                 renderItem={({ item }) => {
                     // console.log(new Date(dataSensor[item]))
                     return <View className={'mb-3 rounded-lg shadow  p-5 bg-white'}>
                     {/* <Text>{item}</Text> */}
-                    {/* <Text>Date: {}  </Text> */}
-                    <Text>Temperature: {dataSensor[item]?.temperature}°C</Text>
-                    <Text>Humidity: {dataSensor[item]?.humidity}%</Text>
-                    <Text>Soil Moisture: {dataSensor[item]?.soilMoisture}%</Text>
+                    <Text>Date: {item.myDate}  </Text>
+                    <Text>Temperature: {item?.temperature}°C</Text>
+                    <Text>Humidity: {item?.humidity}%</Text>
+                    <Text>Soil Moisture: {item?.soilMoisture}%</Text>
                 </View>
                 }}
                 estimatedItemSize={200}

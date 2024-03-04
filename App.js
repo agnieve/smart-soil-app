@@ -26,7 +26,7 @@ const buttons = [
     },
     {
         nav: 'ChangeCraft',
-        title: 'Change Craft',
+        title: 'Suggest Craft',
         icon: <Ionicons name="refresh" size={30} color="#606060" />
     },
     {
@@ -42,7 +42,8 @@ const buttons = [
 ]
 export default function App() {
     const isConnected = true;
-    const user = useUserStore((state) => state.user);
+    // const user = useUserStore((state) => state.user);
+    const user = true;
 
     function MyDrawer() {
         return (

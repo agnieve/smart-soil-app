@@ -10,6 +10,7 @@ export default function DashboardScreen(){
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [text, setText] = useState([]);
     const [title, setTitle] = useState("");
+    const [harvestDate, setHarvestDate] = useState("");
 
     useEffect(()=>{
         const timer = setInterval(() => {
@@ -18,12 +19,6 @@ export default function DashboardScreen(){
                 const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
                 const result = await response.json();
                 const objKeys = Object.keys(result);
-
-                const resp = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/craftSelected.json');
-                const res = await resp.json();
-
-                console.log("changed name: ", res);
-                setTitle(res);
 
                 setDataKeys(objKeys);
                 setDataSensor(result);
@@ -56,7 +51,16 @@ export default function DashboardScreen(){
     },[])
 
     useEffect(()=> {
+        (async ()=> {
+            const resp = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/craftSelected.json');
+                const res = await resp.json();
 
+                const resp3 = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/harvestDate.json');
+                const res3 = await resp3.json();
+
+                setTitle(res);
+                setHarvestDate(res3);
+        })();
     },[]);
 
     async function switchHandler() {
@@ -78,6 +82,7 @@ export default function DashboardScreen(){
     return <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} className={'flex flex-1 bg-white flex-col p-5 gap-y-3'}>
         <WarningPopup text={text} isVisible={isModalVisible} setIsVisible={setIsModalVisible} />
         <Text className={'text-2xl'}>{title}</Text>
+        <Text className={'text-xl'}>Harvest Date: {new Date(harvestDate).toLocaleDateString()}</Text>
         <View className={'bg-[#914C9E] w-56 p-5 rounded-full h-56 flex justify-center'}>
             <Text className={'mb-3 text-white text-center'}>Soil Moisture</Text>
             <Text className={'text-5xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.soilMoisture}%</Text>
