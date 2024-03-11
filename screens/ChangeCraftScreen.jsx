@@ -35,7 +35,7 @@ export default function ChangeCraftScreen(){
 
             setHarvestDate(res3)
             // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
-            if(new Date(res3).getTime() > new Date().getTime()){
+            if(new Date(res3).getTime() > new Date(res3).getTime()){
                 setError("You cannot change craft while the previous craft is not yet harvested");
                 
             } else {
@@ -161,7 +161,7 @@ export default function ChangeCraftScreen(){
                                 <Text>Temperature ({item.min_temp} - {item.max_temp}°C)</Text>
                                 <Text>Humiidty ({item.min_humidity} - {item.max_humidity}%)</Text>
                                 <Text>Humiidty ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
-                                {/* <Text>{item.days_to_harvest}</Text> */}
+                                <Text>Days to harvest - {item.days_to_harvest} days</Text>
                             </View>
                         </TouchableOpacity>
                 })
