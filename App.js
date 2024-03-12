@@ -42,8 +42,8 @@ const buttons = [
 ]
 export default function App() {
     const isConnected = true;
-    // const user = useUserStore((state) => state.user);
-    const user = true;
+    const user = useUserStore((state) => state.user);
+    // const user = true;
 
     function MyDrawer() {
         return (
