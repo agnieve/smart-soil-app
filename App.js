@@ -20,6 +20,7 @@ const buttons = [
         title: 'Dashboard',
         icon: <Ionicons name="home" size={30} color="#606060" />
     },
+    // diri ko mag usab sa imu screen title ngay sa sidebar
     {
         nav: 'SuccessRate',
         title: 'Craft Success Rate',
@@ -83,12 +84,13 @@ export default function App() {
                     </SafeAreaView>
                 )}
             >
-                <Drawer.Screen name="Dashboard" component={DashboardScreen} />
-                <Drawer.Screen name="SuccessRate" component={SuccessRateScreen} />
+            {/* diri ko mag change title sa mga screens... */}
+                <Drawer.Screen name="Dashboard" options={{ title: 'Success Rate' }} component={DashboardScreen} />
+                <Drawer.Screen name="SuccessRate" options={{ title: 'Success Rate' }} component={SuccessRateScreen} />
                 {/* <Drawer.Screen name="TagCraft" component={TagCraftScreen} /> */}
-                <Drawer.Screen name="ChangeCraft" component={ChangeCraftScreen} />
-                <Drawer.Screen name="History" component={HistoryScreen} />
-                <Drawer.Screen name="Logout" component={LogoutScreen}  />
+                <Drawer.Screen name="ChangeCraft" options={{ title: 'Success Rate' }} component={ChangeCraftScreen} />
+                <Drawer.Screen name="History" options={{ title: 'Success Rate' }} component={HistoryScreen} />
+                <Drawer.Screen name="Logout" options={{ title: 'Success Rate' }} component={LogoutScreen}  />
             </Drawer.Navigator>
         );
     }
