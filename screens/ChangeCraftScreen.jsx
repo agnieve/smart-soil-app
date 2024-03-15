@@ -35,7 +35,7 @@ export default function ChangeCraftScreen(){
 
             setHarvestDate(res3)
             // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
-            if(new Date(res3).getTime() > new Date(res3).getTime()){
+            if(new Date(res3).getTime() > new Date(res3).getTime(harvestDate)){
                 setError("You cannot change craft while the previous craft is not yet harvested");
                 
             } else {
@@ -48,7 +48,7 @@ export default function ChangeCraftScreen(){
                             {
                                 'parts': [
                                     {
-                                        "text": "can you suggest vegetables that can be planted in philippines if the temperature is 30 degrees Celcius the humidity is 70% and soil moisture is 50% and return it as json with the property of name, description, min_temp, max_temp, min_humidity, max_humidity, min_soil_moisture, max_soil_moisture, days_to_harvest"
+                                        "text": `can you suggest vegetables that can be planted in philippines if the temperature is 30 degrees Celcius the humidity is 70% and soil moisture is 50% and return it as json with the property of name, description, min_temp, max_temp, min_humidity, max_humidity, min_soil_moisture, max_soil_moisture, days_to_harvest, success_rate,  success_rate, success_advice`
                                     }
                                 ]
                             }
@@ -154,7 +154,7 @@ export default function ChangeCraftScreen(){
                     return <TouchableOpacity key={index} onPress={()=> {
                          setIsSelected(item);
                     }} className={'flex flex-row border border-secondaryColor rounded-xl p-5 mb-3'}>
-                            {isSelected === item ? <Ionicons name={'ellipse'} size={20} /> : <Ionicons name={'ellipse-outline'} size={20} />}
+                            {/* {isSelected === item ? <Ionicons name={'ellipse'} size={20} /> : <Ionicons name={'ellipse-outline'} size={20} />} */}
                             <View>
                                 <Text className={'ml-3'}>{item.name}</Text>
                                 <Text className={'mb-3'}>- {item.description}</Text>
@@ -162,16 +162,20 @@ export default function ChangeCraftScreen(){
                                 <Text>Humiidty ({item.min_humidity} - {item.max_humidity}%)</Text>
                                 <Text>Humiidty ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
                                 <Text>Days to harvest - {item.days_to_harvest} days</Text>
+                                <Text>Harvest Rate - {item.success_rate} %</Text>
+                                <Text className={'pr-4'}>Success Tips - {item.success_advice}</Text>
                             </View>
                         </TouchableOpacity>
                 })
             }
-            
-            {
+                <View className="mb-20">
+
+                </View>
+            {/* {
                 !error ? <TouchableOpacity disabled={error ? true : false} onPress={()=> changeCraftHandler(isSelected.name, isSelected.days_to_harvest)} className={'w-full bg-secondaryColor p-3 rounded-xl mb-20'}>
                             <Text className={'text-center text-white'}>Change Craft</Text>
                         </TouchableOpacity> : null
-            }
+            } */}
         </ScrollView>
     )
 }
