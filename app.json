@@ -21,10 +21,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ag0513.smartsoilmobile"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ed50ab6c-8ebc-4aff-bf0c-c7bf7152ee3b"
+      }
     }
   },
   "android.config.googleMaps.apiKey": "AIzaSyAMXMlQPozlW21yX9TOiCRlyZonNlcyOmI",

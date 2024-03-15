@@ -13,11 +13,12 @@ export default function HistoryScreen(){
     const [search, setSearch] = useState("");
     const [myArr, setMyArr] = useState([]);
     const [searchArr, setSearchArr] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
-        const timer = setInterval(() => {
 
             (async ()=> {
+                setLoading(true);
                 const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
                 const result = await response.json();
                 const objKeys = Object.keys(result);
@@ -56,10 +57,9 @@ export default function HistoryScreen(){
                     arr.push(result[objKeys[i]]);
                 }
 
-                setMyArr(arr);
+                setMyArr(arr);4
+                setLoading(false);
             })();
-            return ()=> clearInterval(timer)
-        }, 5000);
     },[])
 
     const searchHandler = (val) => {
@@ -100,7 +100,12 @@ export default function HistoryScreen(){
       let dayName = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
     return(
-        <View className={'flex flex-1 w-full h-full p-5'}>
+        <>
+            {
+            loading ?
+            <Text>loading... </Text>
+            :
+            <View className={'flex flex-1 w-full h-full p-5'}>
             <WarningPopup text={text} isVisible={isModalVisible} setIsVisible={setIsModalVisible} />
             <Input
                 addStyle={'bg-white'}
@@ -123,5 +128,7 @@ export default function HistoryScreen(){
                 estimatedItemSize={200}
                 />
         </View>
+        }
+        </>
     )
 }

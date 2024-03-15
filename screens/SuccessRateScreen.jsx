@@ -20,7 +20,7 @@ function removeUnwantedChars(inputString) {
     return stringWithoutJSON;
 }
 
-export default function ChangeCraftScreen(){
+export default function SuccessRateScreen(){
 
     const [vegetables, setVegetables] = useState([]);
     const [isSelected, setIsSelected] = useState(-1);
@@ -114,57 +114,16 @@ export default function ChangeCraftScreen(){
         return this;
     };
 
-    async function changeCraftHandler(name, days_to_harvest) {
-        
-        if(new Date(harvestDate).getTime() > new Date().getTime()){
-            setError("You cannot change craft while the previous craft is not yet harvested");
-        }else{
-            const base_url = 'https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app';
-            const options = {
-                method: 'PUT',
-                body: `"${name}"`
-            }
-            const response = await fetch(base_url+"/craftSelected.json", options);
-    
-            const options2 = {
-                method: 'PUT',
-                body: `"${new Date().addDays(days_to_harvest)}"`
-            }
-            const response2 = await fetch(base_url+"/harvestDate.json", options2);
-        
-            const result = await response.json();
-            const result2 = await response2.json();
-    
-            console.log("result: ", result);
-            console.log("result2: ", result2);
-    
-            setIsSuccess(true)
-        }
-
-        
-    }
     return(
         <ScrollView className={'flex flex-1 p-5'}>
-            <Text className={'my-3 text-center text-xl'}>Select Craft</Text>
-            <Text className={'text-gray-500 p-3 border rounded-xl border-gray-300 mb-5 '}>Welcome to our mobile app, where you can unlock a world of customization with our 'Change Features' functionality, putting you in control like never before.</Text>
-            <View className={'bg-red-500 p-3 rounded-xl mb-3 relative'}>
-                <Text className={'text-white'}>{error}</Text>
-                <Text className={'text-white mt-2 font-bold'}>Harvest Date is on {new Date(harvestDate).toLocaleDateString()}</Text>
-            </View>
+            <Text className={'my-3 text-center text-xl'}>Craft Success Rate</Text>
+            <Text className={'text-gray-500 p-3 border rounded-xl border-gray-300 mb-5 '}>AI Powered Craft Suggestion with success rate on every farm craft.</Text>
                 <>
 
                     {
                         loading ? <Text>Loading..</Text>
                         : 
                         <>
-                        {
-                    isSuccess ? <View className={'bg-green-500 p-3 rounded-xl mb-3 relative'}>
-                        <Text className={'text-white'}>Successfully Change Vegetables!. Please Restart Controll Box</Text>
-                        <TouchableOpacity onPress={()=> setIsSuccess(false)} className={'absolute top-2 right-2'}>
-                            <Ionicons name={'close'} size={20} color={'#fff'} />
-                        </TouchableOpacity>
-                    </View>: null
-                }
                     {
                         (vegetables && vegetables.length > 0) && vegetables?.map((item, index) => {
                             return <TouchableOpacity key={index} onPress={()=> {
@@ -185,13 +144,7 @@ export default function ChangeCraftScreen(){
                         })
                     }
                         <View className="mb-20">
-
                         </View>
-                    {/* {
-                        !error ? <TouchableOpacity disabled={error ? true : false} onPress={()=> changeCraftHandler(isSelected.name, isSelected.days_to_harvest)} className={'w-full bg-secondaryColor p-3 rounded-xl mb-20'}>
-                                    <Text className={'text-center text-white'}>Change Craft</Text>
-                                </TouchableOpacity> : null
-                    } */}
                 </>
             }
         </>
