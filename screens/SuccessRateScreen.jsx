@@ -28,6 +28,7 @@ export default function SuccessRateScreen(){
     const [error, setError] = useState("");
     const [harvestDate, setHarvestDate] = useState("");
     const [loading, setLoading] = useState(false);
+    const [tryagain, setTryagain] = useState(0);
 
     useEffect(()=> {
         (async ()=> {
@@ -35,15 +36,8 @@ export default function SuccessRateScreen(){
             const resp3 = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/harvestDate.json');
             const res3 = await resp3.json();
 
-            console.log("res3: ", res3);
             setHarvestDate(res3)
-            // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
-            if(new Date(res3).getTime() > new Date(res3).getTime()){
-                setError("You cannot change craft while the previous craft is not yet harvested");
-                setLoading(false);
-                return;
-            } else {
-                setError("");
+         
                 const base_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDEdYmtSgXXxAE91-YiSbp-w6lOip9Qo-E';
                 const options = {
                     method: "POST",
@@ -86,27 +80,26 @@ export default function SuccessRateScreen(){
                 }
     
                 const response = await fetch(base_url, options);
-    
-                if(response.status !== 'number'){
+                
+                if(response.ok){
                     const result = await response.json();
                     const eyy = removeUnwantedChars(result.candidates[0].content.parts[0].text)
-                    // const convJson = JSON.parse(eyy);
+
                     const vegies = JSON.parse(eyy);
     
-                    console.log(vegies?.vegetables);
-    
-                    setVegetables(vegies?.vegetables);
+                    setVegetables(vegies.vegetables);
 
                     setLoading(false);
                     return;
                 }
 
+                setError("There was an error in fetching the data. Please try again later.");
                 setLoading(false);
                 return;
-            }
+                
         
         })();
-    }, []);
+    }, [tryagain]);
  
     
     Date.prototype.addDays = function(days) {
@@ -125,6 +118,13 @@ export default function SuccessRateScreen(){
                         : 
                         <>
                     {
+                        error ? <View>
+                            <Text className={'mb-3 px-3 py-2'}>{error}</Text>
+                            <TouchableOpacity onPress={()=> setTryagain(prev => prev + 1)} className='px-4 py-3 bg-green-500'>
+                                <Text>Try Again</Text>
+                            </TouchableOpacity>
+                        </View>
+                        :
                         (vegetables && vegetables.length > 0) && vegetables?.map((item, index) => {
                             return <TouchableOpacity key={index} onPress={()=> {
                                 setIsSelected(item);

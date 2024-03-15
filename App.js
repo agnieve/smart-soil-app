@@ -1,3 +1,4 @@
+import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
 import {SafeAreaView, View, Text, TouchableOpacity} from 'react-native';
 import LoginScreen from "./screens/LoginScreen";
@@ -88,7 +89,7 @@ export default function App() {
                 <Drawer.Screen name="Dashboard" options={{ title: 'Success Rate' }} component={DashboardScreen} />
                 <Drawer.Screen name="SuccessRate" options={{ title: 'Success Rate' }} component={SuccessRateScreen} />
                 {/* <Drawer.Screen name="TagCraft" component={TagCraftScreen} /> */}
-                <Drawer.Screen name="ChangeCraft" options={{ title: 'Success Rate' }} component={ChangeCraftScreen} />
+                <Drawer.Screen name="ChangeCraft" options={{ title: 'Craft Suggestion' }} component={ChangeCraftScreen} />
                 <Drawer.Screen name="History" options={{ title: 'Success Rate' }} component={HistoryScreen} />
                 <Drawer.Screen name="Logout" options={{ title: 'Success Rate' }} component={LogoutScreen}  />
             </Drawer.Navigator>

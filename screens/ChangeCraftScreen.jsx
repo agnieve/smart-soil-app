@@ -35,7 +35,7 @@ export default function ChangeCraftScreen(){
             const resp3 = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/harvestDate.json');
             const res3 = await resp3.json();
 
-            console.log("res3: ", res3);
+            // console.log("res3: ", res3);
             setHarvestDate(res3)
             // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
             if(new Date(res3).getTime() > new Date(res3).getTime()){
@@ -52,7 +52,7 @@ export default function ChangeCraftScreen(){
                             {
                                 'parts': [
                                     {
-                                        "text": `can you suggest vegetables that can be planted in philippines if the temperature is 30 degrees Celcius the humidity is 70% and soil moisture is 50% and return it as json with the property of name, description, min_temp, max_temp, min_humidity, max_humidity, min_soil_moisture, max_soil_moisture, days_to_harvest, success_rate,  success_rate, success_advice`
+                                        "text": `can you suggest vegetables that can be planted in philippines if the temperature is 30 degrees Celcius the humidity is 70% and soil moisture is 50% and return it as json with the property of name, description, min_temp, max_temp, min_humidity, max_humidity, min_soil_moisture, max_soil_moisture, days_to_harvest`
                                     }
                                 ]
                             }
@@ -87,20 +87,21 @@ export default function ChangeCraftScreen(){
     
                 const response = await fetch(base_url, options);
     
-                if(response.status !== 'number'){
+                if(response.ok){
                     const result = await response.json();
                     const eyy = removeUnwantedChars(result.candidates[0].content.parts[0].text)
                     // const convJson = JSON.parse(eyy);
                     const vegies = JSON.parse(eyy);
-    
-                    console.log(vegies?.vegetables);
+                    
+                    // console.log("vegiess: ", vegies);
     
                     setVegetables(vegies?.vegetables);
 
                     setLoading(false);
                     return;
                 }
-
+                
+                setError("Failed to fetch data. Pleast try again");
                 setLoading(false);
                 return;
             }
@@ -135,8 +136,8 @@ export default function ChangeCraftScreen(){
             const result = await response.json();
             const result2 = await response2.json();
     
-            console.log("result: ", result);
-            console.log("result2: ", result2);
+            // console.log("result: ", result);
+            // console.log("result2: ", result2);
     
             setIsSuccess(true)
         }
@@ -166,6 +167,13 @@ export default function ChangeCraftScreen(){
                     </View>: null
                 }
                     {
+                        error ? <View>
+                            <Text className={'mb-3 px-3 py-2'}>{error}</Text>
+                            <TouchableOpacity onPress={()=> setTryagain(prev => prev + 1)} className='px-4 py-3 bg-green-500'>
+                                <Text>Try Again</Text>
+                            </TouchableOpacity>
+                        </View>
+                        :
                         (vegetables && vegetables.length > 0) && vegetables?.map((item, index) => {
                             return <TouchableOpacity key={index} onPress={()=> {
                                 setIsSelected(item);

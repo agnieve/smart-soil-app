@@ -74,7 +74,7 @@ export default function DashboardScreen(){
     
         const result = await response.json();
     
-        console.log("result: ", result);
+        // console.log("result: ", result);
 
         setToggle(prev => !prev);
     }
