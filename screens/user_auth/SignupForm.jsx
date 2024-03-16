@@ -38,6 +38,10 @@ export default function SignupForm(props){
             errors.password = "Password is required";
         }
 
+        if(password.length < 8) {
+            errors.password = "Password should be at least 8 characters";
+        }
+
         if(Object.keys(errors).length > 0) {
             setError(errors);
             return;
@@ -78,8 +82,8 @@ export default function SignupForm(props){
         }
         {
             error.email || error.password ? <View className={'w-full p-2 rounded-lg bg-red-500'}>
-                <Text className='text-white'>- {error.email}</Text>
-                <Text className='text-white'>- {error.password}</Text>
+                {error.email && <Text className='text-white'>- {error.email}</Text>}
+                {error.password && <Text className='text-white'>- {error.password}</Text>}
             </View> : null
         }
         {

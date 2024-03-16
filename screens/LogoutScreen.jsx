@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from "react-native";
+import {View, Text, TouchableOpacity, Image} from "react-native";
 import {useUserStore} from "../zustand_store/auth";
 
 export default function LogoutScreen(props){
@@ -8,6 +8,7 @@ export default function LogoutScreen(props){
 
 
     return <View className={'flex flex-1 justify-center items-center p-5'}>
+        <Image className={'w-44 h-44 mb-3'} source={require('../assets/logo.png')} />
         <Text className={'mb-5'}>Are you sure you want to logout?</Text>
         <TouchableOpacity onPress={()=> logout()} className={'w-full bg-blue-700 p-3 rounded-xl mb-3'}>
             <Text className={'text-center text-white'}>Logout</Text>

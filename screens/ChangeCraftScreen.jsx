@@ -20,7 +20,7 @@ function removeUnwantedChars(inputString) {
     return stringWithoutJSON;
 }
 
-export default function ChangeCraftScreen(){
+export default function ChangeCraftScreen({ navigation, route}){
 
     const [vegetables, setVegetables] = useState([]);
     const [isSelected, setIsSelected] = useState(-1);
@@ -41,71 +41,6 @@ export default function ChangeCraftScreen(){
             // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
             if(new Date(res3).getTime() > new Date(res3).getTime()){
                 setError("You cannot change craft while the previous craft is not yet harvested");
-                setLoading(false);
-                return;
-            } else {
-                setError("");
-                const base_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDEdYmtSgXXxAE91-YiSbp-w6lOip9Qo-E';
-                const options = {
-                    method: "POST",
-                    body: JSON.stringify({
-                        'contents' : [
-                            {
-                                'parts': [
-                                    {
-                                        "text": `can you suggest vegetables that can be planted in philippines if the temperature is 30 degrees Celcius the humidity is 70% and soil moisture is 50% and return it as json with the property of name, description, min_temp, max_temp, min_humidity, max_humidity, min_soil_moisture, max_soil_moisture, days_to_harvest`
-                                    }
-                                ]
-                            }
-                        ],
-                        "generationConfig": {
-                            "temperature": 0.9,
-                            "topK": 1,
-                            "topP": 1,
-                            "maxOutputTokens": 2048,
-                            "stopSequences": []
-                          },
-                          "safetySettings": [
-                            {
-                              "category": "HARM_CATEGORY_HARASSMENT",
-                              "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                            },
-                            {
-                              "category": "HARM_CATEGORY_HATE_SPEECH",
-                              "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                            },
-                            {
-                              "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                              "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                            },
-                            {
-                              "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-                              "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                            }
-                          ]
-                    })
-                }
-    
-                const response = await fetch(base_url, options);
-    
-                if(response.ok){
-                    const result = await response.json();
-                    const eyy = removeUnwantedChars(result.candidates[0].content.parts[0].text)
-                    // const convJson = JSON.parse(eyy);
-
-                    console.log("eyyy: ", eyy);
-                    
-                    const vegies = JSON.parse(eyy);
-                    
-                    // console.log("vegiess: ", vegies);
-    
-                    setVegetables(vegies?.vegetables);
-                    
-                    setLoading(false);
-                    return;
-                }
-                
-                setErrorFetch("Failed to fetch data. Pleast try again");
                 setLoading(false);
                 return;
             }
@@ -139,10 +74,7 @@ export default function ChangeCraftScreen(){
         
             const result = await response.json();
             const result2 = await response2.json();
-    
-            // console.log("result: ", result);
-            // console.log("result2: ", result2);
-    
+
             setIsSuccess(true)
         }
     }
@@ -155,28 +87,10 @@ export default function ChangeCraftScreen(){
                 <Text className={'text-white mt-2 font-bold'}>Harvest Date is on {new Date(harvestDate).toLocaleDateString()}</Text>
             </View>
                 <>
-
                     {
-                        loading ? <Text>Loading..</Text>
-                        : 
-                        <>
-                        {
-                    isSuccess ? <View className={'bg-green-500 p-3 rounded-xl mb-3 relative'}>
-                        <Text className={'text-white'}>Successfully Change Vegetables!. Please Restart Control Box</Text>
-                        <TouchableOpacity onPress={()=> setIsSuccess(false)} className={'absolute top-2 right-2'}>
-                            <Ionicons name={'close'} size={20} color={'#fff'} />
-                        </TouchableOpacity>
-                    </View>: null
-                }
-                    {
-                         errorFetch ? <View>
-                            <Text className={'mb-3 px-3 py-2'}>{error}</Text>
-                            <TouchableOpacity onPress={()=> setTryagain(prev => prev + 1)} className='px-4 py-3 bg-green-500'>
-                                <Text>Try Again</Text>
-                            </TouchableOpacity>
-                        </View>
-                        :
-                        (vegetables && vegetables.length > 0) && vegetables?.map((item, index) => {
+                       <>
+                       {
+                        route.params.data?.map((item, index) => {
                             return <TouchableOpacity key={index} onPress={()=> {
                                 setIsSelected(item);
                             }} className={'flex flex-row border border-secondaryColor rounded-xl p-5 mb-3'}>
@@ -188,23 +102,14 @@ export default function ChangeCraftScreen(){
                                         <Text>Humidity ({item.min_humidity} - {item.max_humidity}%)</Text>
                                         <Text>Humidity ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
                                         <Text>Days to harvest - {item.days_to_harvest} days</Text>
-                                        <Text>Harvest Rate - {item.success_rate} %</Text>
-                                        <Text className={'pr-4'}>Success Tips - {item.success_advice}</Text>
                                     </View>
                                 </TouchableOpacity>
                         })
+                       }
+                        <View className="mb-20"></View>
+                    </>
                     }
-                        <View className="mb-20">
-
-                        </View>
-                    {/* {
-                        !error ? <TouchableOpacity disabled={error ? true : false} onPress={()=> changeCraftHandler(isSelected.name, isSelected.days_to_harvest)} className={'w-full bg-secondaryColor p-3 rounded-xl mb-20'}>
-                                    <Text className={'text-center text-white'}>Change Craft</Text>
-                                </TouchableOpacity> : null
-                    } */}
                 </>
-            }
-        </>
         </ScrollView>
     )
 }

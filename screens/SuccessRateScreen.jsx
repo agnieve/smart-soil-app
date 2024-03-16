@@ -20,8 +20,9 @@ function removeUnwantedChars(inputString) {
     return stringWithoutJSON;
 }
 
-export default function SuccessRateScreen(){
+export default function SuccessRateScreen({ navigation, route}){
 
+    console.log(" nara oh: ", route.params);
     const [vegetables, setVegetables] = useState([]);
     const [isSelected, setIsSelected] = useState(-1);
     const [isSuccess, setIsSuccess] = useState(false);
@@ -43,71 +44,10 @@ export default function SuccessRateScreen(){
                 setError("You cannot view success rate in crafts while the previous craft is not yet harvested");
                 setLoading(false);
                 return;
-            } else {
-                const base_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDEdYmtSgXXxAE91-YiSbp-w6lOip9Qo-E';
-                const options = {
-                    method: "POST",
-                    body: JSON.stringify({
-                        'contents' : [
-                            {
-                                'parts': [
-                                    {
-                                        "text": `can you suggest vegetables that can be planted in philippines if the temperature is 30 degrees Celcius the humidity is 70% and soil moisture is 50% and return it as json with the property of name, description, min_temp, max_temp, min_humidity, max_humidity, min_soil_moisture, max_soil_moisture, days_to_harvest, success_rate,  success_rate, success_advice`
-                                    }
-                                ]
-                            }
-                        ],
-                        "generationConfig": {
-                            "temperature": 0.9,
-                            "topK": 1,
-                            "topP": 1,
-                            "maxOutputTokens": 2048,
-                            "stopSequences": []
-                          },
-                          "safetySettings": [
-                            {
-                              "category": "HARM_CATEGORY_HARASSMENT",
-                              "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                            },
-                            {
-                              "category": "HARM_CATEGORY_HATE_SPEECH",
-                              "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                            },
-                            {
-                              "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
-                              "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                            },
-                            {
-                              "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
-                              "threshold": "BLOCK_MEDIUM_AND_ABOVE"
-                            }
-                          ]
-                    })
-                }
-    
-                const response = await fetch(base_url, options);
-                
-                if(response.ok){
-                    const result = await response.json();
-                    const eyy = removeUnwantedChars(result.candidates[0].content.parts[0].text)
-
-                    const vegies = JSON.parse(eyy);
-    
-                    setVegetables(vegies.vegetables);
-
-                    setLoading(false);
-                    return;
-                }
-
-                setErrorFetch("There was an error in fetching the data. Please try again later.");
-                setLoading(false);
-                return;
             }
-                
-                
         
         })();
-    }, [tryagain]);
+    }, []);
  
     
     Date.prototype.addDays = function(days) {
@@ -120,23 +60,8 @@ export default function SuccessRateScreen(){
             <Text className={'my-3 text-center text-xl'}>Craft Success Rate</Text>
             <Text className={'text-gray-500 p-3 border rounded-xl border-gray-300 mb-5 '}>AI Powered Craft Suggestion with success rate on every farm craft.</Text>
                 <>
-
                     {
-                        loading ? <Text>Loading..</Text>
-                        : 
-                        <>
-                    {
-                            error ? <View className={'bg-red-500 rounded-lg'}>
-                                <Text className={' px-3 py-2 text-white'}>{error}</Text>
-                                <Text className={'text-white mt-2 font-bold mb-3 px-3 py-2'}>Harvest Date is on {new Date(harvestDate).toLocaleDateString()}</Text>
-                            </View> : errorFetch ? <View>
-                            <Text className={'mb-3 px-3 py-2'}>{error}</Text>
-                            <TouchableOpacity onPress={()=> setTryagain(prev => prev + 1)} className='px-4 py-3 bg-green-500'>
-                                <Text>Try Again</Text>
-                            </TouchableOpacity>
-                        </View>
-                        :
-                        (vegetables && vegetables.length > 0) && vegetables?.map((item, index) => {
+                        route.params.data?.map((item, index) => {
                             return <TouchableOpacity key={index} onPress={()=> {
                                 setIsSelected(item);
                             }} className={'flex flex-row border border-secondaryColor rounded-xl p-5 mb-3'}>
@@ -154,11 +79,9 @@ export default function SuccessRateScreen(){
                                 </TouchableOpacity>
                         })
                     }
-                        <View className="mb-20">
-                        </View>
+                    <View className="mb-20">
+                    </View>
                 </>
-            }
-        </>
         </ScrollView>
     )
 }
