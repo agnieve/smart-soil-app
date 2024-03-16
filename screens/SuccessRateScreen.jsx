@@ -126,9 +126,10 @@ export default function SuccessRateScreen(){
                         : 
                         <>
                     {
-                        error ? <View className={'bg-red-500 rounded-lg'}>
-                            <Text className={'mb-3 px-3 py-2 text-white'}>{error}</Text>
-                        </View> : errorFetch ? <View>
+                            error ? <View className={'bg-red-500 rounded-lg'}>
+                                <Text className={' px-3 py-2 text-white'}>{error}</Text>
+                                <Text className={'text-white mt-2 font-bold mb-3 px-3 py-2'}>Harvest Date is on {new Date(harvestDate).toLocaleDateString()}</Text>
+                            </View> : errorFetch ? <View>
                             <Text className={'mb-3 px-3 py-2'}>{error}</Text>
                             <TouchableOpacity onPress={()=> setTryagain(prev => prev + 1)} className='px-4 py-3 bg-green-500'>
                                 <Text>Try Again</Text>

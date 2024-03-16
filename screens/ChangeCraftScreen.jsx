@@ -39,7 +39,7 @@ export default function ChangeCraftScreen(){
             // console.log("res3: ", res3);
             setHarvestDate(res3)
             // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
-            if(new Date(res3).getTime() > new Date().getTime()){
+            if(new Date(res3).getTime() > new Date(res3).getTime()){
                 setError("You cannot change craft while the previous craft is not yet harvested");
                 setLoading(false);
                 return;
@@ -92,12 +92,15 @@ export default function ChangeCraftScreen(){
                     const result = await response.json();
                     const eyy = removeUnwantedChars(result.candidates[0].content.parts[0].text)
                     // const convJson = JSON.parse(eyy);
+
+                    console.log("eyyy: ", eyy);
+                    
                     const vegies = JSON.parse(eyy);
                     
                     // console.log("vegiess: ", vegies);
     
                     setVegetables(vegies?.vegetables);
-
+                    
                     setLoading(false);
                     return;
                 }
