@@ -26,6 +26,7 @@ export default function SuccessRateScreen(){
     const [isSelected, setIsSelected] = useState(-1);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState("");
+    const [errorFetch, setErrorFetch] = useState("");
     const [harvestDate, setHarvestDate] = useState("");
     const [loading, setLoading] = useState(false);
     const [tryagain, setTryagain] = useState(0);
@@ -38,6 +39,11 @@ export default function SuccessRateScreen(){
 
             setHarvestDate(res3)
          
+            if(new Date(res3).getTime() > new Date().getTime()){
+                setError("You cannot view success rate in crafts while the previous craft is not yet harvested");
+                setLoading(false);
+                return;
+            } else {
                 const base_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDEdYmtSgXXxAE91-YiSbp-w6lOip9Qo-E';
                 const options = {
                     method: "POST",
@@ -93,9 +99,11 @@ export default function SuccessRateScreen(){
                     return;
                 }
 
-                setError("There was an error in fetching the data. Please try again later.");
+                setErrorFetch("There was an error in fetching the data. Please try again later.");
                 setLoading(false);
                 return;
+            }
+                
                 
         
         })();
@@ -118,7 +126,9 @@ export default function SuccessRateScreen(){
                         : 
                         <>
                     {
-                        error ? <View>
+                        error ? <View className={'bg-red-500 rounded-lg'}>
+                            <Text className={'mb-3 px-3 py-2 text-white'}>{error}</Text>
+                        </View> : errorFetch ? <View>
                             <Text className={'mb-3 px-3 py-2'}>{error}</Text>
                             <TouchableOpacity onPress={()=> setTryagain(prev => prev + 1)} className='px-4 py-3 bg-green-500'>
                                 <Text>Try Again</Text>
@@ -134,8 +144,8 @@ export default function SuccessRateScreen(){
                                         <Text className={'ml-3'}>{item.name}</Text>
                                         <Text className={'mb-3'}>- {item.description}</Text>
                                         <Text>Temperature ({item.min_temp} - {item.max_temp}°C)</Text>
-                                        <Text>Humiidty ({item.min_humidity} - {item.max_humidity}%)</Text>
-                                        <Text>Humiidty ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
+                                        <Text>Humidity ({item.min_humidity} - {item.max_humidity}%)</Text>
+                                        <Text>Humidity ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
                                         <Text>Days to harvest - {item.days_to_harvest} days</Text>
                                         <Text>Harvest Rate - {item.success_rate} %</Text>
                                         <Text className={'pr-4'}>Success Tips - {item.success_advice}</Text>

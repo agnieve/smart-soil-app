@@ -26,6 +26,7 @@ export default function ChangeCraftScreen(){
     const [isSelected, setIsSelected] = useState(-1);
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState("");
+    const [errorFetch, setErrorFetch] = useState("");
     const [harvestDate, setHarvestDate] = useState("");
     const [loading, setLoading] = useState(false);
 
@@ -38,7 +39,7 @@ export default function ChangeCraftScreen(){
             // console.log("res3: ", res3);
             setHarvestDate(res3)
             // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
-            if(new Date(res3).getTime() > new Date(res3).getTime()){
+            if(new Date(res3).getTime() > new Date().getTime()){
                 setError("You cannot change craft while the previous craft is not yet harvested");
                 setLoading(false);
                 return;
@@ -101,7 +102,7 @@ export default function ChangeCraftScreen(){
                     return;
                 }
                 
-                setError("Failed to fetch data. Pleast try again");
+                setErrorFetch("Failed to fetch data. Pleast try again");
                 setLoading(false);
                 return;
             }
@@ -141,8 +142,6 @@ export default function ChangeCraftScreen(){
     
             setIsSuccess(true)
         }
-
-        
     }
     return(
         <ScrollView className={'flex flex-1 p-5'}>
@@ -160,14 +159,14 @@ export default function ChangeCraftScreen(){
                         <>
                         {
                     isSuccess ? <View className={'bg-green-500 p-3 rounded-xl mb-3 relative'}>
-                        <Text className={'text-white'}>Successfully Change Vegetables!. Please Restart Controll Box</Text>
+                        <Text className={'text-white'}>Successfully Change Vegetables!. Please Restart Control Box</Text>
                         <TouchableOpacity onPress={()=> setIsSuccess(false)} className={'absolute top-2 right-2'}>
                             <Ionicons name={'close'} size={20} color={'#fff'} />
                         </TouchableOpacity>
                     </View>: null
                 }
                     {
-                        error ? <View>
+                         errorFetch ? <View>
                             <Text className={'mb-3 px-3 py-2'}>{error}</Text>
                             <TouchableOpacity onPress={()=> setTryagain(prev => prev + 1)} className='px-4 py-3 bg-green-500'>
                                 <Text>Try Again</Text>
@@ -183,8 +182,8 @@ export default function ChangeCraftScreen(){
                                         <Text className={'ml-3'}>{item.name}</Text>
                                         <Text className={'mb-3'}>- {item.description}</Text>
                                         <Text>Temperature ({item.min_temp} - {item.max_temp}°C)</Text>
-                                        <Text>Humiidty ({item.min_humidity} - {item.max_humidity}%)</Text>
-                                        <Text>Humiidty ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
+                                        <Text>Humidity ({item.min_humidity} - {item.max_humidity}%)</Text>
+                                        <Text>Humidity ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
                                         <Text>Days to harvest - {item.days_to_harvest} days</Text>
                                         <Text>Harvest Rate - {item.success_rate} %</Text>
                                         <Text className={'pr-4'}>Success Tips - {item.success_advice}</Text>
