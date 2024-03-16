@@ -13,11 +13,36 @@ export default function SignupForm(props){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
+    const [error, setError] = useState({
+        email : "",
+        password: ""
+    });
+
 
     const login = useUserStore((state) => state.login);
 
     const signupHandler = async () => {
         const base_url = `https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/users.json`;
+
+        const errors = {};
+
+        if(username === "") {
+            errors.username = "Username is required";
+        }
+
+        if(email === "") {
+            errors.email = "Email is required";
+        }
+
+        if(password === "") {
+            errors.password = "Password is required";
+        }
+
+        if(Object.keys(errors).length > 0) {
+            setError(errors);
+            return;
+        }
+
 
         const options = {
             method: "POST",
@@ -31,6 +56,14 @@ export default function SignupForm(props){
 
         const response = await fetch(base_url, options);
         // console.log(await response.json());
+
+        if(!response.ok){
+            setError({
+                "result" : "Registration failed. Something went wrong."
+            });
+            return;
+        }
+
         setIsSuccess(true);
 
     };
@@ -38,6 +71,17 @@ export default function SignupForm(props){
     return <View className={'flex flex-1 p-5 justify-center items-center bg-primaryColor'}>
 
         <Image className={'w-44 h-44 mb-3'} source={require('../../assets/logo.png')} />
+        {
+            error.result ? <View className={'p-2 rounded-lg bg-red-500 w-full '}>
+                    <Text className='text-white'>{error.result}</Text>
+                </View> : null
+        }
+        {
+            error.email || error.password ? <View className={'w-full p-2 rounded-lg bg-red-500'}>
+                <Text className='text-white'>- {error.email}</Text>
+                <Text className='text-white'>- {error.password}</Text>
+            </View> : null
+        }
         {
             isSuccess ?
                 <View className={'p-4 bg-green-400 rounded-xl w-full flex flex-row justify-between'}>
