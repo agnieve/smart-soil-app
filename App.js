@@ -165,7 +165,6 @@ export default function App() {
                             <Text className={'text-center text-bold text-lg text-[#fff]'}>SMARTSOIL</Text>
                         </View>
                         {
-                            (data && data.length <= 0 ) ? <Text></Text> :
                             buttons.map((button, index) => {
                                 const { icon, title, nav} = button;
 
