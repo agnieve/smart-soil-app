@@ -16,7 +16,7 @@ export default function HistoryScreen(){
     const [loading, setLoading] = useState(false);
 
     useEffect(()=>{
-
+        const timer = setInterval(() => {
             (async ()=> {
                 setLoading(true);
                 const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
@@ -60,6 +60,8 @@ export default function HistoryScreen(){
                 setMyArr(arr);4
                 setLoading(false);
             })();
+            return ()=> clearInterval(timer)
+        }, 5000);
     },[])
 
     const searchHandler = (val) => {
