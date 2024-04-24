@@ -14,9 +14,10 @@ export default function HistoryScreen(){
     const [myArr, setMyArr] = useState([]);
     const [searchArr, setSearchArr] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [count, setCount] = useState(0);
 
     useEffect(()=>{
-        const timer = setInterval(() => {
+        if(count === 0) {
             (async ()=> {
                 setLoading(true);
                 const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
@@ -24,6 +25,7 @@ export default function HistoryScreen(){
                 const objKeys = Object.keys(result);
 
                 console.log("response: ", response);
+
                 setDataKeys(objKeys);
                 setDataSensor(result);
 
@@ -60,9 +62,58 @@ export default function HistoryScreen(){
 
                 setMyArr(arr);4
                 setLoading(false);
+                setCount(prev => prev + 1);
             })();
-            return ()=> clearInterval(timer)
-        }, 1.08e+7);
+        }else{
+            const timer = setInterval(() => {
+                (async ()=> {
+                    setLoading(true);
+                    const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
+                    const result = await response.json();
+                    const objKeys = Object.keys(result);
+    
+                    console.log("response: ", response);
+    
+                    setDataKeys(objKeys);
+                    setDataSensor(result);
+    
+                    const humidity = result[Object.keys(result)[Object.keys(result).length - 1]].humidity;
+                    const temperature = result[Object.keys(result)[Object.keys(result).length - 1]].temperature;
+                    const soilMoisture = result[Object.keys(result)[Object.keys(result).length - 1]].soilMoisture;
+    
+                    
+                    if(humidity <= 50 || temperature >= 35 || soilMoisture <= 50) {
+                        setIsModalVisible(true);
+                        const arr = [];
+                        if(humidity <= 50) {
+                            arr.push("Humidity is Getting Low")
+                        }
+    
+                        if(temperature >= 35){
+                            arr.push("Temperature is Getting High")
+                        }
+    
+                        if(soilMoisture <= 50){
+                            arr.push("Soil is Getting Dry")
+                        }
+    
+                        setText(arr);
+                    }
+    
+                    const arr = [];
+                    for(let i = 0; i < objKeys.length; i++){
+    
+                        result[objKeys[i]].id = objKeys[i];
+                        result[objKeys[i]].myDate = new Date(parseInt(objKeys[i]) * 1000).toLocaleString() + " " + dayName[new Date(parseInt(objKeys[i]) * 1000).getDay()];
+                        arr.push(result[objKeys[i]]);
+                    }
+    
+                    setMyArr(arr);4
+                    setLoading(false);
+                })();
+                return ()=> clearInterval(timer)
+            }, 1.08e+7);
+        }
     },[])
 
     const searchHandler = (val) => {
