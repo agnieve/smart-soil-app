@@ -14,7 +14,6 @@ export default function DashboardScreen(){
 
     useEffect(()=>{
         const timer = setInterval(() => {
-
             (async ()=> {
                 const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
                 const result = await response.json();
@@ -83,17 +82,19 @@ export default function DashboardScreen(){
         <WarningPopup text={text} isVisible={isModalVisible} setIsVisible={setIsModalVisible} />
         <Text className={'text-2xl'}>{title}</Text>
         <Text className={'text-xl'}>Harvest Date: {new Date(harvestDate).toLocaleDateString()}</Text>
-        <View className={'bg-[#914C9E] w-56 p-5 rounded-full h-56 flex justify-center'}>
-            <Text className={'mb-3 text-white text-center'}>Soil Moisture</Text>
-            <Text className={'text-5xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.soilMoisture}%</Text>
+        <View className={'flex flex-row gap-x-3'}>
+            <View className={'bg-[#914C9E] w-40 p-5 rounded-full h-40 flex justify-center'}>
+                <Text className={'mb-3 text-white text-center'}>Soil Moisture</Text>
+                <Text className={'text-4xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.soilMoisture}%</Text>
+            </View>
+            <View className={'bg-[#F9A61C] w-40 p-5 rounded-full h-40 flex justify-center'}>
+                <Text className={'mb-3 text-white text-center'}>Temperature</Text>
+                <Text className={'text-4xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.temperature}°C</Text>
+            </View>
         </View>
-        <View className={'bg-[#F9A61C] w-56 p-5 rounded-full h-56 flex justify-center'}>
-            <Text className={'mb-3 text-white text-center'}>Temperature</Text>
-            <Text className={'text-5xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.temperature}°C</Text>
-        </View>
-        <View className={'bg-[#9ECC54] w-56 p-5 rounded-full h-56 flex justify-center'}>
+        <View className={'bg-[#9ECC54] w-40 p-5 rounded-full h-40 flex justify-center'}>
             <Text className={'mb-3 text-white text-center'}>Humidity</Text>
-            <Text className={'text-5xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.humidity}%</Text>
+            <Text className={'text-4xl text-white text-center'}>{dataSensor[dataKeys[dataKeys.length - 1]]?.humidity}%</Text>
         </View>
         <View className={'w-full h-40'}>
             <Text className={'text-xl mt-10 mb-3'}>Water Automation Status</Text>

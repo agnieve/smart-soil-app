@@ -124,6 +124,8 @@ export default function App() {
     
                 const response = await fetch(base_url, options);
                 
+                console.log(await response.text());
+                
                 if(response.ok){
                     const result = await response.json();
                     const eyy = removeUnwantedChars(result.candidates[0].content.parts[0].text)
@@ -187,12 +189,12 @@ export default function App() {
                 )}
             >
             {/* diri ko mag change title sa mga screens... */}
-                <Drawer.Screen name="Dashboard" options={{ title: 'Success Rate' }} component={DashboardScreen} />
+                <Drawer.Screen name="Dashboard" options={{ title: 'Dashboard' }} component={DashboardScreen} />
                 <Drawer.Screen name="SuccessRate" options={{ title: 'Success Rate' }} component={SuccessRateScreen} initialParams={{ data : data}} />
                 {/* <Drawer.Screen name="TagCraft" component={TagCraftScreen} /> */}
                 <Drawer.Screen name="ChangeCraft" options={{ title: 'Craft Suggestion' }} component={ChangeCraftScreen} initialParams={{data: data}} />
-                <Drawer.Screen name="History" options={{ title: 'Success Rate' }} component={HistoryScreen} />
-                <Drawer.Screen name="Logout" options={{ title: 'Success Rate' }} component={LogoutScreen}  />
+                <Drawer.Screen name="History" options={{ title: 'History' }} component={HistoryScreen} />
+                <Drawer.Screen name="Logout" options={{ title: 'Logout' }} component={LogoutScreen}  />
             </Drawer.Navigator>
         );
     }

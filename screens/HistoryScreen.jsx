@@ -23,6 +23,7 @@ export default function HistoryScreen(){
                 const result = await response.json();
                 const objKeys = Object.keys(result);
 
+                console.log("response: ", response);
                 setDataKeys(objKeys);
                 setDataSensor(result);
 
@@ -61,7 +62,7 @@ export default function HistoryScreen(){
                 setLoading(false);
             })();
             return ()=> clearInterval(timer)
-        }, 5000);
+        }, 1.08e+7);
     },[])
 
     const searchHandler = (val) => {
@@ -108,7 +109,7 @@ export default function HistoryScreen(){
             <Text>loading... </Text>
             :
             <View className={'flex flex-1 w-full h-full p-5'}>
-            <WarningPopup text={text} isVisible={isModalVisible} setIsVisible={setIsModalVisible} />
+            {/* <WarningPopup text={text} isVisible={isModalVisible} setIsVisible={setIsModalVisible} /> */}
             <Input
                 addStyle={'bg-white'}
                 placeholder="Search by Date"
