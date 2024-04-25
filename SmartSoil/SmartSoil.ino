@@ -1,112 +1,258 @@
-/* The true ESP32 chip ID is essentially its MAC address.
-This sketch provides an alternate chip ID that matches 
-the output of the ESP.getChipId() function on ESP8266 
-(i.e. a 32-bit integer matching the last 3 bytes of 
-the MAC address. This is less unique than the 
-MAC address chip ID, but is helpful when you need 
-an identifier that can be no more than a 32-bit integer 
-(like for switch...case).
 
-created 2020-06-07 by cweinhofer
-with help from Cicicok */
-#include <DHT11.h>
+
+#include <AM2302-Sensor.h>
 #include <ESP32Firebase.h>
+#include <WiFi.h>
 
-// Variables to be used to connect to wifi....
-#define _SSID "NCA"          // Your WiFi SSID
-#define _PASSWORD "yangsensei04"      // Your WiFi Password
-#define REFERENCE_URL "https://ced-app-d69aa-default-rtdb.asia-southeast1.firebasedatabase.app/"  // Your Firebase project reference url
+// Wifi Name....
+#define _SSID "GlobeAtHome_5f2d0"
+
+// Wifi password ....
+#define _PASSWORD "G5gqQDks"  
+
+// Firebase Link ....
+#define REFERENCE_URL "https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/"
+
+#define RELAY_PIN 16
+#define MAX_UID 12
 
 // setup firebase reference url..
 Firebase firebase(REFERENCE_URL);
 
-// setup dht11 pin depends on what number of pin it is connected..
-DHT11 dht11(26);
+constexpr unsigned int SENSOR_PIN {13U};
 
-uint32_t chipId = 0;
+AM2302::AM2302_Sensor am2302{SENSOR_PIN};
+
+int _moisture,sensor_analog;
+const int sensor_pin = A0;  /* Soil moisture sensor O/P pin */
+
+char uid[MAX_UID + 1];
+
+const char *generateUID() {
+    const char possible[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (int p = 0; p < MAX_UID; p++) {
+        int r = random(0, strlen(possible));
+        uid[p] = possible[r];
+    }
+    uid[MAX_UID] = '\0';
+    return uid;
+}
 
 void setup() {
-	Serial.begin(115200);
+   Serial.begin(115200);
+   while (!Serial) {
+      yield();
+   }
+   Serial.print(F("\n >>> AM2302-sensor Health Check <<<\n\n"));
 
-  // Wifi Connection
-  WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
-  delay(1000);
+   // put your setup code here, to run once:
+   // set pin and check for sensor
 
-  // Connect to WiFi
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to: ");
-  Serial.println(_SSID);
-  WiFi.begin(_SSID, _PASSWORD);
+  //  if (am2302.begin()) {
+  //     delay(3000);
+  //  }
+  //  else {
+  //     while (true) {
+  //     Serial.println("Error: sensor check. => Please check sensor connection!");
+  //     delay(10000);
+  //     }
+  //  }
 
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print("-");
-  }
+   pinMode(RELAY_PIN, OUTPUT);
 
-  Serial.println("");
-  Serial.println("WiFi Connected");
+   // WiFi Connection
+    WiFi.mode(WIFI_STA);
+    WiFi.disconnect();
+    delay(1000);
+
+    // Connect to WiFi
+    Serial.println();
+    Serial.println("Connecting to: " + String(_SSID));
+    WiFi.begin(_SSID, _PASSWORD);
+
+    while (WiFi.status() != WL_CONNECTED) {
+        delay(500);
+        Serial.print(".");
+    }
+
+    Serial.println("");
+    Serial.println("WiFi Connected");
+
 }
 
 void loop() {
 
-    // reading temperature & humidity using DHT11 
-    int temperature = dht11.readTemperature();
-    int humidity = dht11.readHumidity();
-
-    // Check the results of the readings.
-    // If there are no errors, print the temperature and humidity values.
-    // If there are errors, print the appropriate error messages.
-    if (temperature != DHT11::ERROR_CHECKSUM && temperature != DHT11::ERROR_TIMEOUT &&
-        humidity != DHT11::ERROR_CHECKSUM && humidity != DHT11::ERROR_TIMEOUT)
-    {
-
-      // Examples of setting String, integer and float values.
-
-
-        // firebase.pushString("Example/setString", "It's Working");
-        // firebase.pushInt("Example/setInt", 123);
-        // firebase.pushFloat("Example/setFloat", 45.32);
-
-        // Reading Soil moisture
-        Serial.print(RS.read(), 3);
-        Serial.print('\t');
-        Serial.print(RS.percentage(), 1);
-        Serial.print('\n');
-
-
-        StaticJsonBuffer<256> jsonBuffer;
-        JsonArray& array = jsonBuffer.createArray();
-        array.add("timeStampObject");
-        array.add("temp1");
-        firebase.push("Sensors", array);
-
-
-        firebase.json(true); 
-
-        Serial.print("Temperature: ");
-        Serial.print(temperature);
-        Serial.println(" °C");
-
-        Serial.print("Humidity: ");
-        Serial.print(humidity);
-        Serial.println(" %");
-    }
-    else
-    {
-        if (temperature == DHT11::ERROR_TIMEOUT || temperature == DHT11::ERROR_CHECKSUM)
-        {
-            Serial.print("Temperature Reading Error: ");
-            Serial.println(DHT11::getErrorString(temperature));
-        }
-        if (humidity == DHT11::ERROR_TIMEOUT || humidity == DHT11::ERROR_CHECKSUM)
-        {
-            Serial.print("Humidity Reading Error: ");
-            Serial.println(DHT11::getErrorString(humidity));
-        }
-    }
   
-	delay(3000);
 
+  static int checksum_err{0}, timeout_err {0}, read_freq_err {0};
+
+  auto status = am2302.read();
+  sensor_analog = analogRead(sensor_pin);
+  _moisture = ( 100 - ( (sensor_analog/4095.00) * 100 ) );
+
+  String test = String(generateUID());
+  Serial.print("UID: ");
+  Serial.println(test);
+  
+  String data3 = firebase.getString("dateTime");
+
+  String url = "arduino_sensors/" + data3;
+  Serial.println("Firebase URL: " + url);
+
+  String myTemp = String(am2302.get_Temperature());
+  String myHumid = String(am2302.get_Humidity());
+  String mySoilMoisture = String( _moisture);
+
+  firebase.setString(url + "/temperature", myTemp);
+  firebase.setString(url + "/humidity", myHumid);
+  firebase.setString(url + "/soilMoisture",mySoilMoisture);
+
+  firebase.json(true);
+
+  Serial.print("Temperature: ");
+  Serial.println(am2302.get_Temperature());
+
+  Serial.print("Humidity:    ");
+  Serial.println(am2302.get_Humidity());
+
+  Serial.print("Moisture: ");
+  Serial.print(_moisture); 
+  Serial.println("%");
+
+  String data2 = firebase.getString("switch");
+  Serial.print("Received Int:\t\t");
+  Serial.println(data2);
+
+  String craftSelected = firebase.getString("craftSelected");
+
+  Serial.print("Craft Selected:\t\t");
+
+  if(data2 == "true"){
+    digitalWrite(RELAY_PIN, HIGH);
+  }
+  
+  if(craftSelected === "Ampalaya (Bitter Gourd)"){
+
+    if(am2302.get_Humidity() < 85) {
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() < 8){
+       digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() > 10){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture < 32){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture > 93){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+} 
+
+if (craftSelected === "Eggplant"){
+
+    if(am2302.get_Humidity() < 60) {
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() < 24){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() > 45){
+      digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture < 60){
+      digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture > 90){
+      digitalWrite(RELAY_PIN, LOW);
+    }
+} 
+
+if (craftSelected === "Okra"){
+
+    if(am2302.get_Humidity() < 58) {
+       digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() < 26.6){
+      digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() > 27){
+      digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture < 50){
+      digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture > 70){
+      digitalWrite(RELAY_PIN, LOW);
+    }
+
+} 
+
+if (craftSelected === "Kalabasa"){
+
+    if(am2302.get_Humidity() < 60) {
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() < 18){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() > 70){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture < 70){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture > 80){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+} 
+
+if (craftSelected === "Alugbati"){
+
+    if(am2302.get_Humidity() < 50) {
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() < 25){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(am2302.get_Temperature() > 25){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture < 65){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+
+    if(_moisture > 75){
+        digitalWrite(RELAY_PIN, LOW);
+    }
+    
+}
+else{
+    digitalWrite(RELAY_PIN, HIGH);
+}
+  // if(am2302.get_Temperature() >= 35 || am2302.get_Humidity() <= 70 || _moisture <= 50 || data2 == "true"){
+  //   digitalWrite(RELAY_PIN, LOW);
+  // }
+
+  delay(500);
 }

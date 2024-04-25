@@ -124,8 +124,6 @@ export default function App() {
     
                 const response = await fetch(base_url, options);
                 
-                console.log(await response.text());
-                
                 if(response.ok){
                     const result = await response.json();
                     const eyy = removeUnwantedChars(result.candidates[0].content.parts[0].text)

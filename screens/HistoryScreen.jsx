@@ -24,7 +24,8 @@ export default function HistoryScreen(){
                 const result = await response.json();
                 const objKeys = Object.keys(result);
 
-                console.log("response: ", response);
+                objKeys.sort();
+                objKeys.reverse();
 
                 setDataKeys(objKeys);
                 setDataSensor(result);
@@ -112,7 +113,7 @@ export default function HistoryScreen(){
                     setLoading(false);
                 })();
                 return ()=> clearInterval(timer)
-            }, 1.08e+7);
+            }, 3.6e+6);
         }
     },[])
 
