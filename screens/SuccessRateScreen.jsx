@@ -39,7 +39,7 @@ export default function SuccessRateScreen({ navigation, route}){
             const res3 = await resp3.json();
 
             setHarvestDate(res3)
-         
+            // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
             if(new Date(res3).getTime() > new Date().getTime()){
                 setError("You cannot view success rate in crafts while the previous craft is not yet harvested");
                 setLoading(false);

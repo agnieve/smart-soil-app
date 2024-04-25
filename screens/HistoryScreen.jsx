@@ -113,6 +113,7 @@ export default function HistoryScreen(){
                     setLoading(false);
                 })();
                 return ()=> clearInterval(timer)
+                // timer convert hour to millisecond
             }, 3.6e+6);
         }
     },[])
