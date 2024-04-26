@@ -73,7 +73,7 @@ export default function HistoryScreen(){
                     const result = await response.json();
                     const objKeys = Object.keys(result);
     
-                    console.log("response: ", response);
+                    // console.log("response: ", response);
     
                     setDataKeys(objKeys);
                     setDataSensor(result);

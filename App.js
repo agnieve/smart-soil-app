@@ -81,7 +81,7 @@ export default function App() {
                 setLoading(false);
                 return;
             } else {
-                const base_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDEdYmtSgXXxAE91-YiSbp-w6lOip9Qo-E';
+                const base_url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=AIzaSyDGyPdCccb-2xb10ypkcReMpua_1J_-Za4';
                 const options = {
                     method: "POST",
                     body: JSON.stringify({
@@ -128,12 +128,12 @@ export default function App() {
                     const result = await response.json();
                     const eyy = removeUnwantedChars(result.candidates[0].content.parts[0].text)
 
-                    console.log("before parse: ", eyy);
+                    // console.log("before parse: ", eyy);
                     const vegies = JSON.parse(eyy);
 
                     setData(vegies?.vegetables);
 
-                    console.log("yeee: ", eyy);
+                    // console.log("yeee: ", eyy);
     
                     // setVegetables(vegies.vegetables);
 
