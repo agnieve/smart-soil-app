@@ -1,4 +1,4 @@
-import {View, Text, TouchableOpacity} from "react-native";
+import {View, Text, TouchableOpacity, Touchable} from "react-native";
 import {Ionicons} from "@expo/vector-icons";
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
@@ -40,7 +40,7 @@ export default function ChangeCraftScreen({ navigation, route}){
             setHarvestDate(res3)
             // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
             if(new Date(res3).getTime() > new Date(res3).getTime()){
-                setError("You cannot change craft while the previous craft is not yet harvested");
+                setError("You cannot change crop while the previous crop is not yet harvested");
                 setLoading(false);
                 return;
             }
@@ -54,26 +54,84 @@ export default function ChangeCraftScreen({ navigation, route}){
         return this;
     };
 
-    async function changeCraftHandler(name, days_to_harvest) {
+    async function changeCraftHandler() {
         
-        if(new Date(harvestDate).getTime() > new Date().getTime()){
-            setError("You cannot change craft while the previous craft is not yet harvested");
+        console.log("craft name: ", isSelected);
+
+        if(new Date().getTime() > new Date().getTime(harvestDate)){
+            console.log("error");
+            setError("You cannot change crop while the previous crop is not yet harvested");
         }else{
+            console.log("no error");
+
             const base_url = 'https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app';
             const options = {
                 method: 'PUT',
-                body: `"${name}"`
+                body: `"${isSelected.name}"`
             }
             const response = await fetch(base_url+"/craftSelected.json", options);
     
             const options2 = {
                 method: 'PUT',
-                body: `"${new Date().addDays(days_to_harvest)}"`
+                body: `"${new Date().addDays(isSelected.days_to_harvest)}"`
             }
             const response2 = await fetch(base_url+"/harvestDate.json", options2);
+
+            // diri ang kalbaryo...
+
+            const options3 = {
+                method: 'PUT',
+                body: `${ isSelected.max_humidity }`
+            }
+            const response3 = await fetch(base_url+"/maxHumidity.json", options3);
+
+            const options4 = {
+                method: 'PUT',
+                body: `${ isSelected.min_humidity }`
+            }
+            const response4 = await fetch(base_url+"/minHumidity.json", options4);
+
+            const options5 = {
+                method: 'PUT',
+                body: `${ isSelected.max_temp }`
+            }
+            const response5 = await fetch(base_url+"/maxTemp.json", options5);
+
+            const options6 = {
+                method: 'PUT',
+                body: `${ isSelected.min_temp }`
+            }
+            const response6 = await fetch(base_url+"/minTemp.json", options6);
+
+            const options7 = {
+                method: 'PUT',
+                body: `${ isSelected.max_soil_moisture }`
+            }
+            const response7 = await fetch(base_url+"/maxSoilMoisture.json", options7);
+
+            const options8 = {
+                method: 'PUT',
+                body: `${ isSelected.min_soil_moisture }`
+            }
+            const response8 = await fetch(base_url+"/minSoilMoisture.json", options8);
         
             const result = await response.json();
             const result2 = await response2.json();
+            const result3 = await response3.json();
+            const result4 = await response4.json();
+            const result5 = await response5.json();
+            const result6 = await response6.json();
+            const result7 = await response7.json();
+            const result8 = await response8.json();
+
+            console.log("result: ", result);
+            console.log("result2: ", result2);
+            console.log("result3: ", result3);
+            console.log("result4: ", result4);
+            console.log("result5: ", result5);
+            console.log("result6: ", result6);
+            console.log("result7: ", result7);
+            console.log("result8: ", result8);
 
             setIsSuccess(true)
         }
@@ -106,7 +164,11 @@ export default function ChangeCraftScreen({ navigation, route}){
                                 </TouchableOpacity>
                         })
                        }
-                        <View className="mb-20"></View>
+                        <View className="mb-20">
+                            <TouchableOpacity onPress={changeCraftHandler} className={'bg-secondaryColor text-white p-3 rounded-xl text-center'}>
+                                <Text className={'text-center text-white'}>Change Craft</Text>
+                            </TouchableOpacity>
+                        </View>
                     </>
                     }
                 </>

@@ -5,10 +5,10 @@
 #include <WiFi.h>
 
 // Wifi Name....
-#define _SSID "GlobeAtHome_5f2d0"
+#define _SSID "GlobeAtHome_f59a0"
 
 // Wifi password ....
-#define _PASSWORD "G5gqQDks"  
+#define _PASSWORD "p44qa2AM"  
 
 // Firebase Link ....
 #define REFERENCE_URL "https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -123,130 +123,148 @@ void loop() {
   Serial.print("Received Int:\t\t");
   Serial.println(data2);
 
-  String craftSelected = firebase.getString("craftSelected");
+    String craftSelected = firebase.getString("craftSelected");
+    String maxHumidity = firebase.getString("maxHumidity");
+    String minHumidity = firebase.getString("minHumidity");
+    String maxTemperature = firebase.getString("maxTemp");
+    String minTemperature = firebase.getString("minTemp");
+    String maxMoisture = firebase.getString("maxSoilMoisture");
+    String minMoisture = firebase.getString("minSoilMoisture");
+
 
   Serial.print("Craft Selected:\t\t");
+  Serial.print("maxHumidity:\t\t");
+  Serial.print(maxHumidity.toInt());
+  Serial.print("minHumidity:\t\t");
+  Serial.print(minHumidity.toInt());
+  Serial.print("maxTemperature:\t\t");
+  Serial.print(maxTemperature.toInt());
+  Serial.print("minTemperature:\t\t");
+  Serial.print(minTemperature.toInt());
+  Serial.print("maxMoisture:\t\t");
+  Serial.print(maxMoisture.toInt());
+  Serial.print("minMoisture:\t\t");
+  Serial.print(minMoisture.toInt());
 
   if(data2 == "true"){
     digitalWrite(RELAY_PIN, HIGH);
   }
   
-  if(craftSelected === "Ampalaya (Bitter Gourd)"){
 
-    if(am2302.get_Humidity() < 85) {
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() < 8){
-       digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() > 10){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture < 32){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture > 93){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-} 
-
-if (craftSelected === "Eggplant"){
-
-    if(am2302.get_Humidity() < 60) {
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() < 24){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() > 45){
-      digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture < 60){
-      digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture > 90){
-      digitalWrite(RELAY_PIN, LOW);
-    }
-} 
-
-if (craftSelected === "Okra"){
-
-    if(am2302.get_Humidity() < 58) {
-       digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() < 26.6){
-      digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() > 27){
-      digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture < 50){
-      digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture > 70){
-      digitalWrite(RELAY_PIN, LOW);
-    }
-
-} 
-
-if (craftSelected === "Kalabasa"){
-
-    if(am2302.get_Humidity() < 60) {
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() < 18){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() > 70){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture < 70){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture > 80){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-} 
-
-if (craftSelected === "Alugbati"){
-
-    if(am2302.get_Humidity() < 50) {
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() < 25){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(am2302.get_Temperature() > 25){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture < 65){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-
-    if(_moisture > 75){
-        digitalWrite(RELAY_PIN, LOW);
-    }
-    
+if(am2302.get_Humidity() < minMoisture.toInt()) {
+    digitalWrite(RELAY_PIN, LOW);
 }
+
+if(am2302.get_Temperature() < minTemperature.toInt()){
+    digitalWrite(RELAY_PIN, LOW);
+}
+
+if(am2302.get_Temperature() > maxTemperature.toInt()){
+    digitalWrite(RELAY_PIN, LOW);
+}
+
+if(_moisture < minMoisture.toInt()){
+    digitalWrite(RELAY_PIN, LOW);
+}
+
+if(_moisture > maxMoisture.toInt()){
+    digitalWrite(RELAY_PIN, LOW);
+}
+
+// if (craftSelected === "Eggplant"){
+
+//     if(am2302.get_Humidity() < 60) {
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(am2302.get_Temperature() < 24){
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(am2302.get_Temperature() > 45){
+//       digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(_moisture < 60){
+//       digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(_moisture > 90){
+//       digitalWrite(RELAY_PIN, LOW);
+//     }
+// } 
+
+// if (craftSelected === "Okra"){
+
+//     if(am2302.get_Humidity() < 58) {
+//        digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(am2302.get_Temperature() < 26.6){
+//       digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(am2302.get_Temperature() > 27){
+//       digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(_moisture < 50){
+//       digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(_moisture > 70){
+//       digitalWrite(RELAY_PIN, LOW);
+//     }
+
+// }
+
+// if (craftSelected === "Kalabasa"){
+
+//     if(am2302.get_Humidity() < 60) {
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(am2302.get_Temperature() < 18){
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(am2302.get_Temperature() > 70){
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(_moisture < 70){
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(_moisture > 80){
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+// }
+
+// if (craftSelected === "Alugbati"){
+
+//     if(am2302.get_Humidity() < 50) {
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(am2302.get_Temperature() < 25){
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(am2302.get_Temperature() > 25){
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(_moisture < 65){
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+
+//     if(_moisture > 75){
+//         digitalWrite(RELAY_PIN, LOW);
+//     }
+    
+// }
+
 else{
     digitalWrite(RELAY_PIN, HIGH);
 }

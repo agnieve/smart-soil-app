@@ -41,7 +41,7 @@ export default function SuccessRateScreen({ navigation, route}){
             setHarvestDate(res3)
             // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
             if(new Date(res3).getTime() > new Date().getTime()){
-                setError("You cannot view success rate in crafts while the previous craft is not yet harvested");
+                setError("You cannot view success rate in crops while the previous craft is not yet harvested");
                 setLoading(false);
                 return;
             }
@@ -57,8 +57,8 @@ export default function SuccessRateScreen({ navigation, route}){
 
     return(
         <ScrollView className={'flex flex-1 p-5'}>
-            <Text className={'my-3 text-center text-xl'}>Craft Success Rate</Text>
-            <Text className={'text-gray-500 p-3 border rounded-xl border-gray-300 mb-5 '}>AI Powered Craft Suggestion with success rate on every farm craft.</Text>
+            <Text className={'my-3 text-center text-xl'}>Crop Success Rate</Text>
+            <Text className={'text-gray-500 p-3 border rounded-xl border-gray-300 mb-5 '}>AI Powered Crop Suggestion with success rate on every farm craft.</Text>
                 <>
                     {
                         route.params.data?.map((item, index) => {
