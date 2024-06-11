@@ -20,6 +20,64 @@ function removeUnwantedChars(inputString) {
     return stringWithoutJSON;
 }
 
+const myVegetables = [
+    {
+        name: "Ampalaya (Bitter Gourd)",
+        description: "Ampalaya is a vegetable that is known for its bitter taste. It is a good source of vitamins and minerals.",
+        min_humidity: 85,
+        max_humidity: 95,
+        min_temp: 8,
+        max_temp: 10,
+        min_soil_moisture: 32,
+        max_soil_moisture: 93,  
+        days_to_harvest: 60
+    },
+    {
+        name: "Eggplant",
+        description: "Eggplant is a vegetable that is known for its purple color. It is a good source of vitamins and minerals.",
+        min_humidity: 85,
+        max_humidity: 95,
+        min_temp: 10,
+        max_temp: 15,
+        min_soil_moisture: 30,
+        max_soil_moisture: 90,
+        days_to_harvest: 70
+    },
+    {
+        name: "Okra",
+        description: "Okra is a vegetable that is known for its slimy texture. It is a good source of vitamins and minerals.", 
+        min_humidity: 58,
+        max_humidity: 95,
+        min_temp: 26.6,
+        max_temp: 27,
+        min_soil_moisture: 50,
+        max_soil_moisture: 70,
+        days_to_harvest: 50
+    },
+    {
+        name: "Kalabasa",
+        description: "Kalabasa is a vegetable that is known for its orange color. It is a good source of vitamins and minerals.",   
+        min_humidity: 60,
+        max_humidity: 95,
+        min_temp: 18,
+        max_temp: 70,
+        min_soil_moisture: 70,
+        max_soil_moisture: 80,
+        days_to_harvest: 60
+    },
+    {
+        name: "Alugbati",
+        description: "Alugbati is a vegetable that is known for its slimy texture. It is a good source of vitamins and minerals.",
+        min_humidity: 50,
+        max_humidity: 95,
+        min_temp: 25,
+        max_temp: 25,
+        min_soil_moisture: 65,
+        max_soil_moisture: 75,
+        days_to_harvest: 45
+    }
+];
+
 export default function ChangeCraftScreen({ navigation, route}){
 
     const [vegetables, setVegetables] = useState([]);
@@ -36,7 +94,7 @@ export default function ChangeCraftScreen({ navigation, route}){
             const resp3 = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/harvestDate.json');
             const res3 = await resp3.json();
 
-            // console.log("res3: ", res3);
+            console.log("res3: ", res3);
             setHarvestDate(res3)
             // diri ko mag usab sa change craft para ma enable butangan lng res3 ang isa ka date...
             if(new Date(res3).getTime() > new Date(res3).getTime()){
@@ -148,7 +206,7 @@ export default function ChangeCraftScreen({ navigation, route}){
                     {
                        <>
                        {
-                        route.params.data?.map((item, index) => {
+                        myVegetables.map((item, index) => {
                             return <TouchableOpacity key={index} onPress={()=> {
                                 setIsSelected(item);
                             }} className={'flex flex-row border border-secondaryColor rounded-xl p-5 mb-3'}>

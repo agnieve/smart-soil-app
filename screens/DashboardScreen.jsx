@@ -52,6 +52,8 @@ export default function DashboardScreen(){
                     }
                     
                     if(arr.length > 0) {
+                        console.log("there's an error: ", arr);
+
                         setIsModalVisible(true);
                         setText(arr);
                         return;
@@ -166,7 +168,8 @@ export default function DashboardScreen(){
 
                     if(soilMoisture > 75){
                         arr.push("Soil is getting dry")
-                    }
+                    }   
+
                     
                     if(arr.length > 0) {
                         setIsModalVisible(true);
@@ -186,6 +189,9 @@ export default function DashboardScreen(){
 
                 const resp3 = await fetch('https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/harvestDate.json');
                 const res3 = await resp3.json();
+
+                console.log("title: ", res);
+                console.log("harvestDate: ", res3);
 
                 setTitle(res);
                 setHarvestDate(res3);
@@ -209,7 +215,15 @@ export default function DashboardScreen(){
     }
 
     return <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} className={'flex flex-1 bg-white flex-col p-5 gap-y-3'}>
-        <WarningPopup text={text} isVisible={isModalVisible} setIsVisible={setIsModalVisible} />
+        {
+            text.map((item, index) => <WarningPopup color={
+                item === "Humidity is Getting Low" ? 'bg-[#9ECC54]' : 
+                item === "Temperature is Getting Low" ? 'bg-[#F9A61C]' : 
+                item === "Temperature is Getting High" ? 'bg-[#F9A61C]' : 
+                item === "Soil is overly wet" ? 'bg-[#914C9E]' : 
+                item === "Soil is getting dry" ? 'bg-[#914C9E]' : 'bg-[#F9A61C]'
+            } key={index} text={item} isVisible={isModalVisible} setIsVisible={setIsModalVisible}/>)
+        }
         <Text className={'text-2xl'}>{title}</Text>
         <Text className={'text-xl'}>Harvest Date: {new Date(harvestDate).toLocaleDateString()}</Text>
         <View className={'flex flex-row gap-x-3'}>
