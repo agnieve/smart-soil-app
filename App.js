@@ -19,6 +19,7 @@ import HistoryScreen from "./screens/HistoryScreen";
 import LogoutScreen from "./screens/LogoutScreen";
 import { useUserStore } from "./zustand_store/auth";
 import SuccessRateScreen from "./screens/SuccessRateScreen";
+import SuggestCraftScreen from "./screens/SuggestCraftScreen";
 
 const Drawer = createDrawerNavigator();
 const buttons = [
@@ -34,8 +35,13 @@ const buttons = [
     icon: <Ionicons name="bookmark" size={30} color="#606060" />,
   },
   {
-    nav: "ChangeCraft",
+    nav: "CraftSuggestion",
     title: "Suggest Crops",
+    icon: <Ionicons name="bookmarks-outline" size={30} color="#606060" />,
+  },
+  {
+    nav: "ChangeCraft",
+    title: "Change Crops",
     icon: <Ionicons name="refresh" size={30} color="#606060" />,
   },
   {
@@ -219,10 +225,16 @@ export default function App() {
           component={SuccessRateScreen}
           initialParams={{ data: data }}
         />
+        <Drawer.Screen
+          name="CraftSuggestion"
+          options={{ title: "Crop Suggestion" }}
+          component={SuggestCraftScreen}
+          initialParams={{ data: data }}
+        />
         {/* <Drawer.Screen name="TagCraft" component={TagCraftScreen} /> */}
         <Drawer.Screen
           name="ChangeCraft"
-          options={{ title: "Crop Suggestion" }}
+          options={{ title: "Change Crop" }}
           component={ChangeCraftScreen}
           initialParams={{ data: data }}
         />
@@ -243,6 +255,7 @@ export default function App() {
   function Navigation() {
     return (
       <NavigationContainer>
+        {/* {isConnected ? <MyDrawer /> : <LoginScreen />} */}
         {user ? <MyDrawer /> : <LoginScreen />}
       </NavigationContainer>
     );

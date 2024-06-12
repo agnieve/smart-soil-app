@@ -11,176 +11,181 @@ export default function DashboardScreen(){
     const [text, setText] = useState([]);
     const [title, setTitle] = useState("");
     const [harvestDate, setHarvestDate] = useState("");
+    const [plus, setPlus] = useState(0);
 
     useEffect(()=>{
 
         console.log("useEffect");
-        const timer = setInterval(() => {
-            (async ()=> {
-                const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
-                const result = await response.json();
-                const objKeys = Object.keys(result);
-
-                setDataKeys(objKeys);
-                setDataSensor(result);
-
-                const humidity = result[Object.keys(result)[Object.keys(result).length - 1]].humidity;
-                const temperature = result[Object.keys(result)[Object.keys(result).length - 1]].temperature;
-                const soilMoisture = result[Object.keys(result)[Object.keys(result).length - 1]].soilMoisture;
-
-                if(title === 'Ampalaya (Bitter Gourd)'){
-                    const arr = [];
-
-                    if(humidity < 85) {
-                        arr.push("Humidity is Getting Low")
-                    }
-
-                    if(temperature < 8){
-                        arr.push("Temperature is Getting Low")
-                    }
-
-                    if(temperature > 10){
-                        arr.push("Temperature is Getting High")
-                    }
-
-                    if(soilMoisture < 32){
-                        arr.push("Soil is overly wet")
-                    }
-
-                    if(soilMoisture > 93){
-                        arr.push("Soil is getting dry")
+        if(plus === 1) {
+            const timer = setInterval(() => {
+                (async ()=> {
+                    const response = await fetch(`https://soil-moisture-database-eea02-default-rtdb.asia-southeast1.firebasedatabase.app/arduino_sensors.json`);
+                    const result = await response.json();
+                    const objKeys = Object.keys(result);
+    
+                    setDataKeys(objKeys);
+                    setDataSensor(result);
+    
+                    const humidity = result[Object.keys(result)[Object.keys(result).length - 1]].humidity;
+                    const temperature = result[Object.keys(result)[Object.keys(result).length - 1]].temperature;
+                    const soilMoisture = result[Object.keys(result)[Object.keys(result).length - 1]].soilMoisture;
+    
+                    if(title === 'Ampalaya (Bitter Gourd)'){
+                        const arr = [];
+    
+                        if(humidity < 85) {
+                            arr.push("Humidity is Getting Low")
+                        }
+    
+                        if(temperature < 8){
+                            arr.push("Temperature is Getting Low")
+                        }
+    
+                        if(temperature > 10){
+                            arr.push("Temperature is Getting High")
+                        }
+    
+                        if(soilMoisture < 32){
+                            arr.push("Soil is overly wet")
+                        }
+    
+                        if(soilMoisture > 93){
+                            arr.push("Soil is getting dry")
+                        }
+                        
+                        if(arr.length > 0) {
+                            console.log("there's an error: ", arr);
+    
+                            setIsModalVisible(true);
+                            setText(arr);
+                            return;
+                        }
+                    } 
+                    
+                    if (title === 'Eggplant'){
+                        const arr = [];
+    
+                        if(humidity < 60) {
+                            arr.push("Humidity is Getting Low")
+                        }
+    
+                        if(temperature < 24){
+                            arr.push("Temperature is Getting Low")
+                        }
+    
+                        if(temperature > 45){
+                            arr.push("Temperature is Getting High")
+                        }
+    
+                        if(soilMoisture < 60){
+                            arr.push("Soil is overly wet")
+                        }
+    
+                        if(soilMoisture > 90){
+                            arr.push("Soil is getting dry")
+                        }
+                        
+                        if(arr.length > 0) {
+                            setIsModalVisible(true);
+                            setText(arr);
+                        }
+                    } 
+                    
+                    if (title === 'Okra'){
+                        const arr = [];
+    
+                        if(humidity < 58) {
+                            arr.push("Humidity is Getting Low")
+                        }
+    
+                        if(temperature < 26.6){
+                            arr.push("Temperature is Getting Low")
+                        }
+    
+                        if(temperature > 27){
+                            arr.push("Temperature is Getting High")
+                        }
+    
+                        if(soilMoisture < 50){
+                            arr.push("Soil is overly wet")
+                        }
+    
+                        if(soilMoisture > 70){
+                            arr.push("Soil is getting dry")
+                        }
+                        
+                        if(arr.length > 0) {
+                            setIsModalVisible(true);
+                            setText(arr);
+                        }
+                    } 
+                    
+                    if (title === 'Kalabasa'){
+                        const arr = [];
+    
+                        if(humidity < 60) {
+                            arr.push("Humidity is Getting Low")
+                        }
+    
+                        if(temperature < 18){
+                            arr.push("Temperature is Getting Low")
+                        }
+    
+                        if(temperature > 70){
+                            arr.push("Temperature is Getting High")
+                        }
+    
+                        if(soilMoisture < 70){
+                            arr.push("Soil is overly wet")
+                        }
+    
+                        if(soilMoisture > 80){
+                            arr.push("Soil is getting dry")
+                        }
+                        
+                        if(arr.length > 0) {
+                            setIsModalVisible(true);
+                            setText(arr);
+                        }
+                    } 
+                    
+                    if (title === 'Alugbati'){
+                        const arr = [];
+    
+                        if(humidity < 50) {
+                            arr.push("Humidity is Getting Low")
+                        }
+    
+                        if(temperature < 25){
+                            arr.push("Temperature is Getting Low")
+                        }
+    
+                        if(temperature > 25){
+                            arr.push("Temperature is Getting High")
+                        }
+    
+                        if(soilMoisture < 65){
+                            arr.push("Soil is overly wet")
+                        }
+    
+                        if(soilMoisture > 75){
+                            arr.push("Soil is getting dry")
+                        }   
+    
+                        
+                        if(arr.length > 0) {
+                            setIsModalVisible(true);
+                            setText(arr);
+                        }
                     }
                     
-                    if(arr.length > 0) {
-                        console.log("there's an error: ", arr);
-
-                        setIsModalVisible(true);
-                        setText(arr);
-                        return;
-                    }
-                } 
-                
-                if (title === 'Eggplant'){
-                    const arr = [];
-
-                    if(humidity < 60) {
-                        arr.push("Humidity is Getting Low")
-                    }
-
-                    if(temperature < 24){
-                        arr.push("Temperature is Getting Low")
-                    }
-
-                    if(temperature > 45){
-                        arr.push("Temperature is Getting High")
-                    }
-
-                    if(soilMoisture < 60){
-                        arr.push("Soil is overly wet")
-                    }
-
-                    if(soilMoisture > 90){
-                        arr.push("Soil is getting dry")
-                    }
-                    
-                    if(arr.length > 0) {
-                        setIsModalVisible(true);
-                        setText(arr);
-                    }
-                } 
-                
-                if (title === 'Okra'){
-                    const arr = [];
-
-                    if(humidity < 58) {
-                        arr.push("Humidity is Getting Low")
-                    }
-
-                    if(temperature < 26.6){
-                        arr.push("Temperature is Getting Low")
-                    }
-
-                    if(temperature > 27){
-                        arr.push("Temperature is Getting High")
-                    }
-
-                    if(soilMoisture < 50){
-                        arr.push("Soil is overly wet")
-                    }
-
-                    if(soilMoisture > 70){
-                        arr.push("Soil is getting dry")
-                    }
-                    
-                    if(arr.length > 0) {
-                        setIsModalVisible(true);
-                        setText(arr);
-                    }
-                } 
-                
-                if (title === 'Kalabasa'){
-                    const arr = [];
-
-                    if(humidity < 60) {
-                        arr.push("Humidity is Getting Low")
-                    }
-
-                    if(temperature < 18){
-                        arr.push("Temperature is Getting Low")
-                    }
-
-                    if(temperature > 70){
-                        arr.push("Temperature is Getting High")
-                    }
-
-                    if(soilMoisture < 70){
-                        arr.push("Soil is overly wet")
-                    }
-
-                    if(soilMoisture > 80){
-                        arr.push("Soil is getting dry")
-                    }
-                    
-                    if(arr.length > 0) {
-                        setIsModalVisible(true);
-                        setText(arr);
-                    }
-                } 
-                
-                if (title === 'Alugbati'){
-                    const arr = [];
-
-                    if(humidity < 50) {
-                        arr.push("Humidity is Getting Low")
-                    }
-
-                    if(temperature < 25){
-                        arr.push("Temperature is Getting Low")
-                    }
-
-                    if(temperature > 25){
-                        arr.push("Temperature is Getting High")
-                    }
-
-                    if(soilMoisture < 65){
-                        arr.push("Soil is overly wet")
-                    }
-
-                    if(soilMoisture > 75){
-                        arr.push("Soil is getting dry")
-                    }   
-
-                    
-                    if(arr.length > 0) {
-                        setIsModalVisible(true);
-                        setText(arr);
-                    }
-                }
-                
-            })();
-            return ()=> clearInterval(timer)
-        }, 10000);
-    },[])
+                })();
+                return ()=> clearInterval(timer)
+            }, 10000);
+    
+            setPlus(plus + 1)
+        }
+    },[plus])
 
     useEffect(()=> {
         (async ()=> {
@@ -213,7 +218,7 @@ export default function DashboardScreen(){
 
         setToggle(prev => !prev);
     }
-
+ 
     return <ScrollView contentContainerStyle={{ flexGrow: 1, alignItems: 'center' }} className={'flex flex-1 bg-white flex-col p-5 gap-y-3'}>
         {
             text.map((item, index) => <WarningPopup color={

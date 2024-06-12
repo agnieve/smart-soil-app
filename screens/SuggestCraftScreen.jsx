@@ -20,7 +20,7 @@ function removeUnwantedChars(inputString) {
     return stringWithoutJSON;
 }
 
-export default function SuccessRateScreen({ navigation, route}){
+export default function SuggestCraftScreen({ navigation, route}){
 
     console.log(" nara oh: ", route.params);
     const [vegetables, setVegetables] = useState([]);
@@ -57,8 +57,8 @@ export default function SuccessRateScreen({ navigation, route}){
 
     return(
         <ScrollView className={'flex flex-1 p-5'}>
-            <Text className={'my-3 text-center text-xl'}>Crop Success Rate</Text>
-            <Text className={'text-gray-500 p-3 border rounded-xl border-gray-300 mb-5 '}>AI Powered Crop Suggestion with success rate on every farm crop.</Text>
+            <Text className={'my-3 text-center text-xl'}>Suggested Crops</Text>
+            <Text className={'text-gray-500 p-3 border rounded-xl border-gray-300 mb-5 '}>AI Powered Crop Suggestion based on datasets collected on Micro Controller sensors.</Text>
                 <>
                     {
                         route.params.data?.map((item, index) => {
@@ -73,8 +73,6 @@ export default function SuccessRateScreen({ navigation, route}){
                                         <Text>Humidity ({item.min_humidity} - {item.max_humidity}%)</Text>
                                         <Text>Soil Moisture ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
                                         <Text>Days to harvest - {item.days_to_harvest} days</Text>
-                                        <Text>Harvest Rate - {item.success_rate} %</Text>
-                                        <Text className={'pr-4'}>Success Tips - {item.success_advice}</Text>
                                     </View>
                                 </TouchableOpacity>
                         })

@@ -196,12 +196,18 @@ export default function ChangeCraftScreen({ navigation, route}){
     }
     return(
         <ScrollView className={'flex flex-1 p-5'}>
-            <Text className={'my-3 text-center text-xl'}>Select Craft</Text>
+            <Text className={'my-3 text-center text-xl'}>Select Crop</Text>
             <Text className={'text-gray-500 p-3 border rounded-xl border-gray-300 mb-5 '}>Welcome to our mobile app, where you can unlock a world of customization with our 'Change Features' functionality, putting you in control like never before.</Text>
             <View className={'bg-red-500 p-3 rounded-xl mb-3 relative'}>
                 <Text className={'text-white'}>{error}</Text>
                 <Text className={'text-white mt-2 font-bold'}>Harvest Date is on {new Date(harvestDate).toLocaleDateString()}</Text>
             </View>
+            {
+                isSuccess &&
+                <View className={'bg-green-500 p-3 rounded-xl mb-3 relative'}>
+                    <Text className={'text-white font-bold'}>You have successfully changed crop</Text>
+                </View>
+            }
                 <>
                     {
                        <>
@@ -224,7 +230,7 @@ export default function ChangeCraftScreen({ navigation, route}){
                        }
                         <View className="mb-20">
                             <TouchableOpacity onPress={changeCraftHandler} className={'bg-secondaryColor text-white p-3 rounded-xl text-center'}>
-                                <Text className={'text-center text-white'}>Change Craft</Text>
+                                <Text className={'text-center text-white'}>Change Crop</Text>
                             </TouchableOpacity>
                         </View>
                     </>
