@@ -222,7 +222,7 @@ export default function ChangeCraftScreen({ navigation, route}){
                                         <Text className={'mb-3'}>- {item.description}</Text>
                                         <Text>Temperature ({item.min_temp} - {item.max_temp}°C)</Text>
                                         <Text>Humidity ({item.min_humidity} - {item.max_humidity}%)</Text>
-                                        <Text>Humidity ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
+                                        <Text>Soil Moisture ({item.min_soil_moisture} - {item.max_soil_moisture}%)</Text>
                                         <Text>Days to harvest - {item.days_to_harvest} days</Text>
                                     </View>
                                 </TouchableOpacity>

@@ -146,6 +146,7 @@ export default function App() {
         const response = await fetch(base_url, options);
         
         if (response.ok) {
+          console.log("fetched successfully!");
           const result = await response.json();
           const eyy = removeUnwantedChars(
             result.candidates[0].content.parts[0].text
@@ -255,8 +256,8 @@ export default function App() {
   function Navigation() {
     return (
       <NavigationContainer>
-        {/* {isConnected ? <MyDrawer /> : <LoginScreen />} */}
-        {user ? <MyDrawer /> : <LoginScreen />}
+        {isConnected ? <MyDrawer /> : <LoginScreen />}
+        {/* {user ? <MyDrawer /> : <LoginScreen />} */}
       </NavigationContainer>
     );
   }
