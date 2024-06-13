@@ -93,7 +93,7 @@ export default function App() {
       );
       const res3 = await resp3.json();
 
-      if (new Date(res3).getTime() > new Date(res3).getTime()) {
+      if (new Date(res3).getTime() > new Date().getTime()) {
         console.log(
           "You cannot view success rate in crops while the previous crops is not yet harvested"
         );
