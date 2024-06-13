@@ -256,8 +256,8 @@ export default function App() {
   function Navigation() {
     return (
       <NavigationContainer>
-        {isConnected ? <MyDrawer /> : <LoginScreen />}
-        {/* {user ? <MyDrawer /> : <LoginScreen />} */}
+        {/* {isConnected ? <MyDrawer /> : <LoginScreen />} */}
+        {user ? <MyDrawer /> : <LoginScreen />}
       </NavigationContainer>
     );
   }
